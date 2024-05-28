@@ -1,0 +1,56 @@
+{
+  "name": "@cnuebred/frontforge",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "cdn/cdn.min.js"
+  ],
+  "scripts": {
+    "dev": "nodemon --watch ./ --exec npx ts-node ./tests/app.ts"
+  },
+  "keywords": [
+    "craft",
+    "carbon",
+    "cube",
+    "cnuebred",
+    "editor",
+    "HTML",
+    "template",
+    "HTML5",
+    "JS",
+    "CSS",
+    "framework",
+    "generator",
+    "html generator",
+    "hive"
+  ],
+  "author": "Cube @cnuebred (jonathan)",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.15.11",
+    "buffer": "^6.0.3",
+    "builtin-modules": "3.3.0",
+    "crypto": "^1.0.1",
+    "crypto-browserify": "^3.12.0",
+    "dotenv": "^16.4.5",
+    "elliptic": "^6.5.5",
+    "esbuild": "^0.17.19",
+    "events": "^3.3.0",
+    "minify": "^10.5.2",
+    "nodemon": "^3.0.1",
+    "process": "^0.11.10",
+    "sass": "^1.77.2",
+    "stream": "^0.0.2",
+    "stream-browserify": "^3.0.0",
+    "ts-node": "^10.9.1",
+    "util": "^0.12.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.1.3"
+  }
+}
