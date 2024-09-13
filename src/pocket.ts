@@ -1,7 +1,5 @@
 // Dynamic state management
 
-// TODO provide type to fully class Pocket
-
 type getter_callback_t<T> = (target: T, property: string | symbol, receiver: any) => void
 type setter_callback_t<T> = (target: T, property: string | symbol, value:any, receiver: any) => void
 

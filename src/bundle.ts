@@ -5,7 +5,7 @@ import { compileString } from 'sass'
 export class ForgeBundle{
   constructor(){}
 
-  async css(path:string){
+  async style(path:string){
       const text = await readFileSync(path)
       const css = compileString(text.toString(), { style: 'compressed' }).css || ''
       const response = await transform(css, {

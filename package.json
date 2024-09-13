@@ -9,7 +9,7 @@
     "cdn/cdn.min.js"
   ],
   "scripts": {
-    "dev": "nodemon --watch ./ --exec npx ts-node ./tests/app.ts"
+    "dev": "npx nodemon --watch ./ --ext ts,js,scss -L --exec npx ts-node ./tests/app.ts"
   },
   "keywords": [
     "craft",
@@ -40,7 +40,6 @@
     "esbuild": "^0.17.19",
     "events": "^3.3.0",
     "minify": "^10.5.2",
-    "nodemon": "^3.0.1",
     "process": "^0.11.10",
     "sass": "^1.77.2",
     "stream": "^0.0.2",
