@@ -40,11 +40,12 @@
     "esbuild": "^0.17.19",
     "events": "^3.3.0",
     "minify": "^10.5.2",
+    "openai": "^4.63.0",
     "process": "^0.11.10",
     "sass": "^1.77.2",
     "stream": "^0.0.2",
     "stream-browserify": "^3.0.0",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "util": "^0.12.5"
   },
   "devDependencies": {

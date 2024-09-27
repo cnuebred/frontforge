@@ -86,16 +86,19 @@ export function Grid(widgets: (Widget|grid_widget_item_t|ContainerWidget|null)[]
   widgets.forEach((rows, index_row:number) => {
     rows.forEach((item, index_col:number) => {
       if (!item) return 
-       if (item instanceof Widget)
-        item.attribute = {
-          style: `grid-column:${index_col+1};grid-row:${index_row+1}`
+       if (item instanceof Widget){
+        item.attribute = {...item.attribute, ...{
+          style: (item.attribute.style || '') + `;grid-column:${index_col+1};grid-row:${index_row+1}`
         }
+      }
+    }
         else{
           const col_span = item.col_span ? ` / ${item.col_span}` : ''
           const row_span = item.row_span ? ` / ${item.row_span}` : ''
-          item.widget.attribute = {
-            style: `grid-column:${index_col+1}${col_span};grid-row:${index_row+1}${row_span}`
+          item.widget.attribute = {...item.widget.attribute, ...{
+            style: (item.widget.attribute.style || '') + `;grid-column:${index_col+1}${col_span};grid-row:${index_row+1}${row_span}`
           }
+        }
         }
     })
   })
