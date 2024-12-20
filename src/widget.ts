@@ -38,20 +38,35 @@ type clone_options_t = {
   with_events?: boolean
 }
 
+type class_operator_t = {
+  add: (class_name:string) => void
+  toggle: (class_name:string) => void
+  remove: (class_name:string) => void
+}
+
+const class_operator = (self: HTMLElement): class_operator_t => {
+    return {
+      add: (class_name) => self.classList.add(class_name),
+      toggle: (class_name) => self.classList.toggle(class_name),
+      remove: (class_name) => self.classList.remove(class_name)
+    }
+}
+
 export class Widget {
   tag: string
   self: HTMLElement
   #value: (() => string) | string
   #attribute: (() => attr_t) | attr_t
   events: [string, (event: Event) => void][] = []
+  style: CSSStyleDeclaration
   //states 
   pinned: boolean = false
   //functions
   show: () => boolean = null
   check_instance = () => 'widget'
+  class: class_operator_t
   readonly query: string
   readonly hash: string
-
   constructor(tag: string = 'div', value: (() => string) | string = '') {
     if (tag.indexOf('.') != -1) {
       const params = tag.split('.')
@@ -63,8 +78,10 @@ export class Widget {
     this.tag = tag
     this.hash = randomBytes(4).toString('hex')
     this.query = `${this.tag}[v=${this.hash}]`
-
+    
     this.self = document.createElement(tag)
+    this.style = this.self.style
+    this.class = class_operator(this.self)
     this.value = value
     this.self.setAttribute('v', `${this.hash}`)
   }
@@ -77,7 +94,6 @@ export class Widget {
   set value(text: (() => string) | string) {
     this.#value = text
   }
-
   set attribute(attr: (() => attr_t) | attr_t) {
     this.#attribute = attr
   }
@@ -106,7 +122,6 @@ export class Widget {
   
     return text;
   }
-
   protected remove_all_attributes() {
     for (let i = this.self.attributes.length - 1; i >= 0; i--) {
       if(this.self.attributes[i].name == 'v') continue
@@ -129,12 +144,18 @@ export class Widget {
       return false
     }
   }
-
-  render() {
-    this.remove_all_attributes()
+  render(with_attributes: boolean = true, with_markdown:boolean = true) {
+    if (with_attributes){
+      this.remove_all_attributes()
+    }
 
     this.rerender_display()
-    this.self.innerHTML = this.convert_markdown_to_html(this.value)
+    if(with_markdown){
+      this.self.innerHTML = this.convert_markdown_to_html(this.value)
+    }else{
+      this.self.innerHTML = this.value
+    }
+  
 
     this.convert_object_to_attributes(this.attribute)
 

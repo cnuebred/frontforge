@@ -14,12 +14,17 @@ export class ContainerWidget extends Widget {
     this.#children.forEach(item => item.destroy())
     this.#children = []
   }
-  render() {
-    this.remove_all_attributes()
+  foreach_children(callback: (item: Widget | ContainerWidget) => void){
+    this.#children.forEach(callback)
+  }
+  render(with_attributes: boolean = true, with_markdown: boolean = true) {
+    if (with_attributes){
+      this.remove_all_attributes()
+    }
     this.rerender_display()
     const children = this.#children.filter(item => !!item)
     children.forEach(item => {
-      item.render()
+      item.render(with_attributes, with_markdown)
     })
     this.convert_object_to_attributes(this.attribute)
     return this
@@ -27,10 +32,13 @@ export class ContainerWidget extends Widget {
   add(widget: Widget) {
     this.#children.push(widget)
   }
-  build() {
+  remove(widget: Widget){
+    this.#children = this.#children.filter(item => item.hash != widget.hash)
+  }
+  build(with_markdown: boolean = true) {
     const children = this.#children.filter(item => !!item)
     children.forEach(item => {
-      item.render()
+      item.render(false, with_markdown)
       item.hook(this.self)
     })
   }

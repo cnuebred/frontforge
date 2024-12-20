@@ -89,6 +89,6 @@ export function Flex(widgets: (Widget|ContainerWidget)[], options: flex_options_
     container.add(item)
   })
   container.build()
-  container.render()
+  container.render(false)
   return container
 }

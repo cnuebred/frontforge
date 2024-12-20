@@ -4,12 +4,22 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js",
+    "./bundle": "./dist/bundle_index.js"
+  },
   "files": [
     "dist",
     "cdn/cdn.min.js"
   ],
   "scripts": {
-    "dev": "npx nodemon --watch ./ --ext ts,js,scss -L --exec npx ts-node ./tests/app.ts"
+    "dev": "npx nodemon --watch ./ --ext ts,js,scss -L --exec npx ts-node ./tests/app.ts",
+    "prepublish": "tsc",
+    "publish": "npm publish --access public",
+    "test": "npx jest",
+    "version": "node version-bump.mjs",
+    "build": "npx tsc",
+    "link": "npm run build && npm link"
   },
   "keywords": [
     "craft",
