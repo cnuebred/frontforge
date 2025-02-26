@@ -100,4 +100,4 @@ appContainer.add(sqlOutput);
 
 // Podłączenie do DOM
 appContainer.hook('app');
-appContainer.build();
+appContainer.build_all();

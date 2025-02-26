@@ -1,5 +1,5 @@
 import esbuild, { transform } from 'esbuild'
-import { readFileSync, writeFile } from 'fs'
+import { mkdir, readFileSync, writeFile } from 'fs'
 import { compileString } from 'sass'
 
 type head_link_rel_t = 'alternate' | 'author' | 'dns-prefetch' |
@@ -71,15 +71,12 @@ export class ForgeBundle {
   constructor() { }
   head = {
     title: (title: string) => this.#head.push(`<title>${title}</title>`),
-    link: (link_obj: head__link_t) => this.#head.push(`<link ${
-      Object.entries(link_obj).map(([key, value]) => `${key}="${value}"`).join(' ')
-    }>`),
-    meta: (meta_obj: head__meta_t) => this.#head.push(`<meta ${
-      Object.entries(meta_obj).map(([key, value]) => `${key}="${value}"`).join(' ')
-    }>`),
-    script: (script_obj: head__script_t) => this.#head.push(`<script ${
-      Object.entries(script_obj).map(([key, value]) => `${key}="${value}"`).join(' ')
-    }>`),
+    link: (link_obj: head__link_t) => this.#head.push(`<link ${Object.entries(link_obj).map(([key, value]) => `${key}="${value}"`).join(' ')
+      }>`),
+    meta: (meta_obj: head__meta_t) => this.#head.push(`<meta ${Object.entries(meta_obj).map(([key, value]) => `${key}="${value}"`).join(' ')
+      }>`),
+    script: (script_obj: head__script_t) => this.#head.push(`<script ${Object.entries(script_obj).map(([key, value]) => `${key}="${value}"`).join(' ')
+      }>`),
   }
   async style(path: string) {
     const text = await readFileSync(path)
@@ -94,9 +91,9 @@ export class ForgeBundle {
     return response.code
   }
 
-  async script(path: (string[] | string), define: {[index:string]: any} = {}, version: string = '0.0.1') {
+  async script(path: (string[] | string), define: { [index: string]: any } = {}, version: string = '0.0.1') {
     const result = await esbuild.build({
-      entryPoints: typeof(path) == 'string' ? [path] : path,
+      entryPoints: typeof (path) == 'string' ? [path] : path,
       bundle: true,
       outfile: 'output.js',
       format: 'esm',
@@ -123,7 +120,7 @@ export class ForgeBundle {
     this.#script.push(result.outputFiles[0].text)
     return result.outputFiles[0].text
   }
-  async build(project_name: string, path_to_save_file?: string) {
+  async build(path_to_save_file?: string) {
     const html_struct = `<html>
       <head>${this.#head.join('\n')}</head>
       <body><app></app></body>
@@ -131,7 +128,7 @@ export class ForgeBundle {
       <script>${this.#script.join('\n')}</script>
       </html>`
     if (!!path_to_save_file)
-      writeFile(`${path_to_save_file}/${project_name}.html`, html_struct, () => { })
+      writeFile(path_to_save_file, html_struct, () => { })
     return html_struct
   }
 }

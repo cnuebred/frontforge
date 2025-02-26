@@ -41,8 +41,7 @@ export type grid_options_t = {
   gridTemplateRows?: string
 }
 
-const DEFAULT_GRID_OPTIONS: grid_options_t = {
-}
+const DEFAULT_GRID_OPTIONS: grid_options_t = {} // TODO... or not
 
 export const filter_object = (object: { [index: string]: any }, callback: (key, value) => boolean) => {
   const entries = Object.entries(object).map(([key, value]) => {
@@ -107,9 +106,12 @@ export function Grid(widgets: (Widget | grid_widget_item_t | ContainerWidget | n
       container.add(item)
     else
       container.add(item.widget)
-    
+
   })
-  container.build()
-  container.render(false)
+  container.build_all()
+  container.render({
+    with_attributes: true,
+    with_markdown: true
+  })
   return container
 }

@@ -51,17 +51,17 @@ const DEFAULT_FLEX_OPTIONS: flex_options_t = {
   direction: flex_direction_e.row,
 }
 
-export const filter_object = (object: {[index: string]: any}, callback: (key, value) => boolean) => {
+export const filter_object = (object: { [index: string]: any }, callback: (key, value) => boolean) => {
   const entries = Object.entries(object).map(([key, value]) => {
-    if(callback(key, value))
+    if (callback(key, value))
       return [key, value]
-    else 
+    else
       return null
   }).filter(item => !!item)
   return Object.fromEntries(entries)
 }
 
-export function Flex(widgets: (Widget|ContainerWidget)[], options: flex_options_t = DEFAULT_FLEX_OPTIONS): ContainerWidget {
+export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_options_t = DEFAULT_FLEX_OPTIONS): ContainerWidget {
   const container = new ContainerWidget()
   options = { ...DEFAULT_FLEX_OPTIONS, ...options }
   const flex_config = {
@@ -76,9 +76,9 @@ export function Flex(widgets: (Widget|ContainerWidget)[], options: flex_options_
   }
   container.attribute = {
     style: style_wrapper(
-      filter_object(flex_config, 
+      filter_object(flex_config,
         (key, value) => {
-          if((key == 'height' || key == 'width') && value.startsWith('undefined'))
+          if ((key == 'height' || key == 'width') && value.startsWith('undefined'))
             return false
           return !!value
         }
@@ -88,7 +88,10 @@ export function Flex(widgets: (Widget|ContainerWidget)[], options: flex_options_
   widgets.forEach(item => {
     container.add(item)
   })
-  container.build()
-  container.render(false)
+  container.build_all()
+  container.render({
+    with_attributes: true,
+    with_markdown: true
+  })
   return container
 }
