@@ -152,7 +152,7 @@ export class ForgeBundle {
 
   replace(obj: {[index: string]: any}){
     Object.entries(obj).forEach(([key, value]) => {
-      this.#html.replaceAll(key, `${value}`)
+      this.#html = this.#html.replaceAll(key, `${value}`)
     })
   }
 }
