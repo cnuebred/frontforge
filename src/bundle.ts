@@ -150,7 +150,7 @@ export class ForgeBundle {
     return html_struct
   }
 
-  replace(obj: Map<string, any>){
+  replace(obj: {[index: string]: any}){
     Object.entries(obj).forEach(([key, value]) => {
       this.#html.replaceAll(key, `${value}`)
     })
