@@ -17,7 +17,7 @@ export class ContainerWidget extends Widget {
   }
   render(render_options: render_options_t = DEFAULT_RENDER_OPTIONS) {
     if (!render_options.with_attributes) {
-      this.remove_all_attributes()
+      this.remove_attributes()
     }
     this.render_display()
     const children = this.#children.filter(item => !!item)

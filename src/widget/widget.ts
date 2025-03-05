@@ -1,38 +1,11 @@
-import { instances } from "./d"
+import { instances } from "../d"
 import { randomBytes } from 'crypto-browserify'
 
 import { ContainerWidget } from "./widget_container"
-import { string_contain } from "./utils"
-
-
+import { string_contain } from "../utils/utils"
 
 type attr_value_t = string | number | boolean | null
 type attr_t = { [index: string]: attr_value_t }
-
-// const read_nest = (object: { [index: string]: any }, address: string | string[]) => {
-//   if (typeof address == 'string')
-//     address = address.split('.')
-
-//   const address_step = address.shift()
-
-//   if (address_step)
-//     return read_nest(object[address_step], address)
-//   else
-//     return object
-// }
-// const set_nest = (object: { [index: string]: any }, address: string | string[], value: any) => {
-//   if (typeof address == 'string')
-//     address = address.split('.')
-
-//   const address_step = address.shift()
-//   if (address_step)
-
-//     if (address.length > 1)
-//       read_nest(object[address_step], address)
-//     else
-//       object[address_step] = value
-// }
-
 
 export type clone_options_t = {
   with_events?: boolean
@@ -41,6 +14,18 @@ export type clone_options_t = {
 export const DEFAULT_CLONE_OPTIONS: clone_options_t = {
   with_events: true
 }
+
+// to move
+
+const get_value_from_function_or_property =
+  <T>(maybe_function: (() => T) | T): T => {
+    if (typeof (maybe_function) == 'function') {
+      return (maybe_function as Function)()
+    }
+    return maybe_function
+  }
+
+// to move 
 
 
 type element_class_operator_t = {
@@ -67,15 +52,14 @@ const element_class_operators = (self: HTMLElement): element_class_operator_t =>
   }
 }
 
-
 export class Widget {
   tag: string
   self: HTMLElement
   root: HTMLElement
-  #value: (() => string) | string
+  #content: (() => string) | string
   #attribute: (() => attr_t) | attr_t
   events: [string, (event: Event) => void][] = []
-  style: CSSStyleDeclaration
+  style: CSSStyleDeclaration // buuu CamelCase :<
   class: element_class_operator_t
   //states 
   pinned: boolean = false
@@ -100,7 +84,7 @@ export class Widget {
     this.self = document.createElement(tag)
     this.class = element_class_operators(this.self)
     this.style = this.self.style
-    this.value = value
+    this.content = value
     this.self.setAttribute('v', `${this.hash}`)
 
     for (const class_param of tag_class_exclusives) {
@@ -108,45 +92,26 @@ export class Widget {
     }
   }
 
-  get value(): string {
-    if (typeof (this.#value) == 'function')
-      return this.#value()
-    return this.#value
+  get content(): string {
+    return get_value_from_function_or_property(this.#content)
   }
-  set value(text: (() => string) | string) {
-    this.#value = text
+  set content(text: (() => string) | string) {
+    this.#content = text
   }
   set attribute(attr: (() => attr_t) | attr_t) {
     this.#attribute = attr
   }
   get attribute(): attr_t {
-    if (typeof this.#attribute === 'function')
-      return this.#attribute()
-    return this.#attribute
+    return get_value_from_function_or_property(this.#attribute)
   }
 
   protected convert_markdown_to_html(text: string): string {
-    text = text
-      .replace(/(?<!\\)\*\*(.*?)\*\*/g, '<b>$1</b>')
-      .replace(/(?<!\\)\*(.*?)\*/g, '<i>$1</i>')
-      .replace(/(?<!\\)```([\S\s]*?)```/g, '<pre><code>$1</code></pre>')
-      .replace(/(?<!\\)`(.*?)`/g, '<code>$1</code>')
-      .replace(/(?<!\\)__(.*?)__/g, '<u>$1</u>')
-      .replace(/(?<!\\)~~(.*?)~~/g, '<s>$1</s>')
-      .replace(/(?<!\\)^# (.*$)/gim, '<h1>$1</h1>')
-      .replace(/(?<!\\)^## (.*$)/gim, '<h2>$1</h2>')
-      .replace(/(?<!\\)^### (.*$)/gim, '<h3>$1</h3>')
-      .replace(/(?<!\\)^#### (.*$)/gim, '<h4>$1</h4>')
-      .replace(/(?<!\\)^##### (.*$)/gim, '<h5>$1</h5>')
-      .replace(/(?<!\\)^###### (.*$)/gim, '<h6>$1</h6>')
-      .replace(/(?<!\\)\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
-      .replace(/\\([_*`~[\]()])/g, '$1');
-
-    return text;
+    return text_to_markdown(text)
   }
-  protected remove_all_attributes() {
+  protected remove_attributes(...except: string[]) {
     for (let i = this.self.attributes.length - 1; i >= 0; i--) {
       if (this.self.attributes[i].name == 'v') continue
+      if (except.includes(this.self.attributes[i].name)) continue
       this.self.removeAttribute(this.self.attributes[i].name)
     }
   }
@@ -168,14 +133,14 @@ export class Widget {
 
   render(render_options: render_options_t = DEFAULT_RENDER_OPTIONS) {
     if (!render_options.with_attributes) {
-      this.remove_all_attributes()
+      this.remove_attributes()
     }
 
     this.render_display()
     if (render_options.with_markdown) {
-      this.self.innerHTML = this.convert_markdown_to_html(this.value)
+      this.self.innerHTML = this.convert_markdown_to_html(this.content)
     } else {
-      this.self.innerHTML = this.value
+      this.self.innerHTML = this.content
     }
 
     this.apply_attributes_by_object(this.attribute)
@@ -222,7 +187,7 @@ export class Widget {
   clone(clone_options: clone_options_t = DEFAULT_CLONE_OPTIONS) {
     const widget = new Widget(this.tag)
     widget.attribute = this.#attribute
-    widget.value = this.#value
+    widget.content = this.#content
     widget.show = this.show
     widget.events = [...this.events]
 

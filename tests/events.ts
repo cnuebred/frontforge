@@ -198,7 +198,7 @@ pocket.set_setter_callback((target) => {
   span.render()
 })
 span.show = () => pocket.target.name != 'Racuch'
-span.value = () => `Hello! *${pocket.target.name}* here`
+span.content = () => `Hello! *${pocket.target.name}* here`
 pocket.target.name = 'romek'
 
 header.hook('app')

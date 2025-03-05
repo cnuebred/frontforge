@@ -1,6 +1,6 @@
-export { Pocket } from "./pocket"
-export { Widget } from "./widget"
-export { ContainerWidget } from "./widget_container"
+export { Pocket } from "./pocket/pocket"
+export { Widget } from "./widget/widget"
+export { ContainerWidget } from "./widget/widget_container"
 export  {  Flex, 
   flex_direction_e,
    flex_justify_e,

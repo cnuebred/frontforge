@@ -1,4 +1,4 @@
-import { Widget } from '../src/widget'
+import { Widget } from '../src/widget/widget'
 import {  Flex, flex_direction_e, flex_justify_e } from '../src/modules/flex'
 import { Grid } from '../src/modules/grid'
 

@@ -8,6 +8,9 @@
 		"dist",
 		"dist/bundle.js"
 	],
+	"exports":{
+		"./bundle": "./dist/bundle.js"
+	},
 	"scripts": {
 		"dev": "npx nodemon --watch ./ --ext ts,js,scss -L --exec npx ts-node ./tests/app.ts",
 		"prepublish": "tsc",

@@ -11,13 +11,11 @@ export class Pocket<T extends object> {
     this.target = new Proxy<T>(obj, {
       get: (target, property, receiver) => {
         const eq = Reflect.get(target, property, receiver);
-        // console.log('GET ', property, target[property])
         this.getters.forEach(item => item(target, property, receiver))
         return eq
       },
       set: (target, property, value, receiver) => {
         const eq = Reflect.set(target, property, value, receiver);
-        // console.log('SET ', property, target[property], value)
         this.setters.forEach(item => item(target, property, value, receiver))
         return eq
       }

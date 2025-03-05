@@ -1,6 +1,6 @@
-import { style_wrapper } from "../style";
-import { Widget } from "../widget";
-import { ContainerWidget } from "../widget_container";
+import { style_wrapper } from "../style/style";
+import { Widget } from "../widget/widget";
+import { ContainerWidget } from "../widget/widget_container";
 
 
 export enum flex_direction_e {
