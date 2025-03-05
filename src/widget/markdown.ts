@@ -1,5 +1,5 @@
 
-const text_to_markdown = (text: string): string => {
+export const text_to_markdown = (text: string): string => {
     text = text
         .replace(/(?<!\\)\*\*(.*?)\*\*/g, '<b>$1</b>')
         .replace(/(?<!\\)\*(.*?)\*/g, '<i>$1</i>')

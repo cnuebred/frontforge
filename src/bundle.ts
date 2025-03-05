@@ -1,6 +1,6 @@
 import { assert } from 'console'
 import esbuild, { transform } from 'esbuild'
-import { mkdir, readFileSync, writeFile } from 'fs'
+import { readFileSync, writeFile } from 'fs'
 import { compileString } from 'sass'
 
 type head_link_rel_t = 'alternate' | 'author' | 'dns-prefetch' |
@@ -15,7 +15,6 @@ type head_meta_http_equiv_t = 'content-security-policy' | 'content-type' |
   'default-style' | 'refresh'
 type head_meta_name_t = 'application-name' | 'author' | 'description' |
   'generator' | 'keywords' | 'viewport'
-
 type head_boolean_t = 'True' | 'False'
 
 

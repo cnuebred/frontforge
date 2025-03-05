@@ -3,6 +3,7 @@ import { randomBytes } from 'crypto-browserify'
 
 import { ContainerWidget } from "./widget_container"
 import { string_contain } from "../utils/utils"
+import { text_to_markdown } from "./markdown"
 
 type attr_value_t = string | number | boolean | null
 type attr_t = { [index: string]: attr_value_t }
