@@ -1,6 +1,4 @@
-import { attributes_t, widget_render_option_t } from "./d"
-import { Pocket } from "./pocket"
-import { DEFAULT_CLONE_OPTIONS, DEFAULT_RENDER_OPTIONS, render_options_t, Widget } from "./widget"
+import {  DEFAULT_RENDER_OPTIONS, render_options_t, Widget } from "./widget"
 
 export class ContainerWidget extends Widget {
   #children: Widget[] = []

@@ -1,7 +1,6 @@
-import { attributes_t, instances, widget_render_option_t } from "./d"
-import { createHash, randomBytes } from 'crypto-browserify'
-import { Pocket } from "./pocket"
-import { validateLocaleAndSetLanguage } from "typescript"
+import { instances } from "./d"
+import { randomBytes } from 'crypto-browserify'
+
 import { ContainerWidget } from "./widget_container"
 import { string_contain } from "./utils"
 
@@ -88,16 +87,16 @@ export class Widget {
 
   constructor(tag: string = 'div', value: (() => string) | string = '') {
     let tag_class_exclusives = []
-    
+
     if (string_contain(tag, '.')) {
       tag_class_exclusives = tag.split('.')
-      tag = tag_class_exclusives.shift() 
+      tag = tag_class_exclusives.shift()
     }
 
     this.tag = tag
     this.hash = randomBytes(4).toString('hex')
     this.query = `${this.tag}[v=${this.hash}]`
-    
+
     this.self = document.createElement(tag)
     this.class = element_class_operators(this.self)
     this.style = this.self.style

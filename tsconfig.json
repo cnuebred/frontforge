@@ -6,7 +6,11 @@
         "moduleResolution": "node",
         "sourceMap": false,
         "outDir": "dist",
-        "declaration": true
+        "declaration": true,
+        "baseUrl": "./",
+        "paths": {
+            "@cnuebred/frontforge/*": ["dist/*"]
+        },
     },
     "include": [
         "src/**/*"

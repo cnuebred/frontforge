@@ -2,9 +2,9 @@
 // pocket, jako osobny nie zintegrowany element - przyjmujacy tylko callbacki
 
 import { reverse } from "dns";
-import { Pocket } from "../src/pocket"
-import { Widget } from "../src/widget"
-import { ContainerWidget } from "../src/widget_container"
+import { Pocket } from "../src/index"
+import { Widget } from "../src/index"
+import { ContainerWidget } from "../src/index"
 
 // class TableWidget extends ContainerWidget {
 //   headers:string[]
