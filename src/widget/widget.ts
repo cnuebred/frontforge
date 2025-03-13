@@ -188,8 +188,9 @@ export class Widget {
   clone(clone_options: clone_options_t = DEFAULT_CLONE_OPTIONS) {
     const widget = new Widget(this.tag)
 
-    widget.self = this.self.cloneNode(true) as HTMLElement
-
+    widget.self = (this.self.cloneNode(true) as HTMLElement)
+    widget.style = widget.self.style
+    
     widget.attribute = this.#attribute
     widget.content = this.#content
     widget.show = this.show
