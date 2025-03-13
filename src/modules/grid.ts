@@ -66,6 +66,7 @@ export function Grid(widgets: (Widget | grid_widget_item_t | ContainerWidget | n
   let grid_config = {
     display: 'grid',
     alignContent: options.align_content,
+    justifyContent: options.justify_content,
     justifyItems: options.justify_items,
     alignItems: options.align_items,
     height: options.height + 'px',
