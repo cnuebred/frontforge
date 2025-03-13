@@ -36,5 +36,7 @@ const grid = Grid([
   [new Widget('span', 'Strona 2.1'), null],
   [null, new Widget('span', 'Strona 4.1')],
   [new Widget('span', 'Strona 3.1'), new Widget('span', 'Strona 3.2')],
-])
+], {
+  gridGap: 10
+})
 grid.hook('app')

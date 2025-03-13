@@ -1,4 +1,4 @@
-import { style_wrapper } from "../style/style";
+import { style_wrapper_case } from "../style/style";
 import { Widget } from "../widget/widget";
 import { ContainerWidget } from "../widget/widget_container";
 
@@ -66,19 +66,19 @@ export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_option
   options = { ...DEFAULT_FLEX_OPTIONS, ...options }
   const flex_config = {
     display: 'flex',
-    flexDirection: options.direction,
-    flexWrap: options.wrap,
-    alignContent: options.align_content,
-    alignItems: options.align_items,
-    justifyContent: options.justify_content,
-    height: options.height + 'px',
-    width: options.width + 'px'
+    flexDirection: options?.direction,
+    flexWrap: options?.wrap,
+    alignContent: options?.align_content,
+    alignItems: options?.align_items,
+    justifyContent: options?.justify_content,
+    height: options?.height?.toString() + 'px',
+    width: options?.width?.toString() + 'px'
   }
   container.attribute = {
-    style: style_wrapper(
+    style: style_wrapper_case(
       filter_object(flex_config,
         (key, value) => {
-          if ((key == 'height' || key == 'width') && value.startsWith('undefined'))
+          if (value?.startsWith('undefined'))
             return false
           return !!value
         }

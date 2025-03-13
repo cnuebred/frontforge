@@ -1,4 +1,4 @@
-import { style_wrapper } from "../style/style";
+import { style_wrapper_case } from "../style/style";
 import { Widget } from "../widget/widget";
 import { ContainerWidget } from "../widget/widget_container";
 
@@ -39,6 +39,7 @@ export type grid_options_t = {
   width?: number,
   gridTemplateColumns?: string
   gridTemplateRows?: string
+  gridGap?: number
 }
 
 const DEFAULT_GRID_OPTIONS: grid_options_t = {} // TODO... or not
@@ -65,20 +66,21 @@ export function Grid(widgets: (Widget | grid_widget_item_t | ContainerWidget | n
   options = { ...DEFAULT_GRID_OPTIONS, ...options }
   let grid_config = {
     display: 'grid',
-    alignContent: options.align_content,
-    justifyContent: options.justify_content,
-    justifyItems: options.justify_items,
-    alignItems: options.align_items,
-    height: options.height + 'px',
-    width: options.width + 'px',
-    gridTemplateColumns: options.gridTemplateColumns,
-    gridTemplateRows: options.gridTemplateRows,
+    alignContent: options?.align_content,
+    justifyContent: options?.justify_content,
+    justifyItems: options?.justify_items,
+    alignItems: options?.align_items,
+    height: options?.height?.toString() + 'px',
+    width: options?.width?.toString() + 'px',
+    gridTemplateColumns: options?.gridTemplateColumns,
+    gridTemplateRows: options?.gridTemplateRows,
+    gridGap: options?.gridGap?.toString() + 'px',
   }
   container.attribute = {
-    style: style_wrapper(
+    style: style_wrapper_case(
       filter_object(grid_config,
         (key, value) => {
-          if ((key == 'height' || key == 'width') && value.startsWith('undefined'))
+          if (value?.startsWith('undefined'))
             return false
           return !!value
         }
