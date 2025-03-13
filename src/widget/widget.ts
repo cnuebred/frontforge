@@ -187,6 +187,9 @@ export class Widget {
   }
   clone(clone_options: clone_options_t = DEFAULT_CLONE_OPTIONS) {
     const widget = new Widget(this.tag)
+
+    widget.self = this.self.cloneNode(true) as HTMLElement
+
     widget.attribute = this.#attribute
     widget.content = this.#content
     widget.show = this.show
@@ -194,7 +197,7 @@ export class Widget {
 
     if (clone_options.with_events)
       this.events.forEach(([event_name, callback]) => {
-        this.self.addEventListener(event_name, (event) => callback(event))
+        widget.self.addEventListener(event_name, (event) => callback(event))
       })
 
     return widget
