@@ -5,6 +5,7 @@ export const text_to_markdown = (text: string): string => {
         .replace(/(?<!\\)\*(.*?)\*/g, '<i>$1</i>')
         .replace(/(?<!\\)```([\S\s]*?)```/g, '<pre><code>$1</code></pre>')
         .replace(/(?<!\\)`(.*?)`/g, '<code>$1</code>')
+        .replace(/\n/g, '<br>')
         .replace(/(?<!\\)__(.*?)__/g, '<u>$1</u>')
         .replace(/(?<!\\)~~(.*?)~~/g, '<s>$1</s>')
         .replace(/(?<!\\)^# (.*$)/gim, '<h1>$1</h1>')
