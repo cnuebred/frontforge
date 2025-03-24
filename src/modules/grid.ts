@@ -76,17 +76,16 @@ export function Grid(widgets: (Widget | grid_widget_item_t | ContainerWidget | n
     gridTemplateRows: options?.gridTemplateRows,
     gridGap: options?.gridGap?.toString() + 'px',
   }
-  container.attribute = {
-    style: style_wrapper_case(
-      filter_object(grid_config,
-        (key, value) => {
-          if (value?.startsWith('undefined'))
-            return false
-          return !!value
-        }
-      )
-    )
-  }
+
+  filter_object(grid_config,
+    (key, value) => {
+      if (value?.startsWith('undefined'))
+        return false
+      if(!!value){
+        container.style[key] = value
+      }
+    }
+  )
 
   widgets.forEach((rows, index_row: number) => {
     rows.forEach((item, index_col: number) => {
