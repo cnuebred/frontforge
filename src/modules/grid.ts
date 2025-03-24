@@ -42,6 +42,13 @@ export type grid_options_t = {
   gridGap?: number
 }
 
+
+export type grid_widget_item_t = {
+  widget: Widget,
+  row_span?: string | number
+  col_span?: string | number
+}
+
 const DEFAULT_GRID_OPTIONS: grid_options_t = {} // TODO... or not
 
 export const filter_object = (object: { [index: string]: any }, callback: (key, value) => boolean) => {
@@ -52,13 +59,6 @@ export const filter_object = (object: { [index: string]: any }, callback: (key, 
       return null
   }).filter(item => !!item)
   return Object.fromEntries(entries)
-}
-
-
-type grid_widget_item_t = {
-  widget: Widget,
-  row_span?: string | number
-  col_span?: string | number
 }
 
 export function Grid(widgets: (Widget | grid_widget_item_t | ContainerWidget | null)[][], options: grid_options_t = DEFAULT_GRID_OPTIONS): ContainerWidget {
