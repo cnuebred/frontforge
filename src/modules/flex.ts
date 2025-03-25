@@ -74,17 +74,15 @@ export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_option
     height: options?.height?.toString() + 'px',
     width: options?.width?.toString() + 'px'
   }
-  container.attribute = {
-    style: style_wrapper_case(
-      filter_object(flex_config,
-        (key, value) => {
-          if (value?.startsWith('undefined'))
-            return false
-          return !!value
-        }
-      )
-    )
-  }
+  filter_object(flex_config,
+    (key, value) => {
+      if (value?.startsWith('undefined'))
+        return false
+      if(!!value){
+        container.style[key] = value
+      }
+    }
+  )
   widgets.forEach(item => {
     container.add(item)
   })
