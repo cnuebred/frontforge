@@ -21,7 +21,7 @@ const row = Flex([
 ], {
   direction: flex_direction_e.row,
   justify_content: flex_justify_e.space_between,
-  height: 150
+  height: '150px'
 })
 
 
@@ -37,6 +37,7 @@ const grid = Grid([
   [null, new Widget('span', 'Strona 4.1')],
   [new Widget('span', 'Strona 3.1'), new Widget('span', 'Strona 3.2')],
 ], {
-  gridGap: 10
+  column_gap: '10px',
+  row_gap: '10px'
 })
 grid.hook('app')

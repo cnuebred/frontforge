@@ -35,11 +35,12 @@ export type grid_options_t = {
   justify_items?: grid_justify_items_e
   align_items?: grid_align_items_e
   justify_content?: grid_justify_content_e,
-  height?: number,
-  width?: number,
+  height?: string,
+  width?: string,
   gridTemplateColumns?: string
   gridTemplateRows?: string
-  gridGap?: number
+  column_gap?: string
+  row_gap?: string
 }
 
 
@@ -70,11 +71,12 @@ export function Grid(widgets: (Widget | grid_widget_item_t | ContainerWidget | n
     justifyContent: options?.justify_content,
     justifyItems: options?.justify_items,
     alignItems: options?.align_items,
-    height: options?.height?.toString() + 'px',
-    width: options?.width?.toString() + 'px',
     gridTemplateColumns: options?.gridTemplateColumns,
     gridTemplateRows: options?.gridTemplateRows,
-    gridGap: options?.gridGap?.toString() + 'px',
+    rowGap: options?.row_gap,
+    columnGap: options?.column_gap,
+    height: options?.height,
+    width: options?.width 
   }
 
   filter_object(grid_config,

@@ -38,13 +38,15 @@ export enum flex_justify_e {
 }
 
 export type flex_options_t = {
-  direction?: flex_direction_e
-  wrap?: flex_wrap_e
-  align_content?: flex_align_content_e
-  align_items?: flex_align_items_e
+  direction?: flex_direction_e,
+  wrap?: flex_wrap_e,
+  align_content?: flex_align_content_e,
+  align_items?: flex_align_items_e,
   justify_content?: flex_justify_e,
-  height?: number,
-  width?: number
+  row_gap?: string
+  column_gap?: string
+  height?: string,
+  width?: string
 }
 
 const DEFAULT_FLEX_OPTIONS: flex_options_t = {
@@ -71,8 +73,10 @@ export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_option
     alignContent: options?.align_content,
     alignItems: options?.align_items,
     justifyContent: options?.justify_content,
-    height: options?.height?.toString() + 'px',
-    width: options?.width?.toString() + 'px'
+    rowGap: options?.row_gap,
+    columnGap: options?.column_gap,
+    height: options?.height,
+    width: options?.width
   }
   filter_object(flex_config,
     (key, value) => {
