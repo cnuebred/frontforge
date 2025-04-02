@@ -1,6 +1,6 @@
 {
 	"name": "@cnuebred/frontforge",
-	"version": "0.0.30",
+	"version": "0.1.0",
 	"description": "",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
@@ -17,7 +17,7 @@
 		"prepublish": "tsc",
 		"publish": "npm publish --access public",
 		"test": "npx jest",
-		"version": "node version-bump.mjs",
+		"version": "node tools/version-bump.mjs",
 		"build": "npx tsc",
 		"link": "npm run build && npm link"
 	},
