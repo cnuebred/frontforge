@@ -1,6 +1,6 @@
-import { style_wrapper } from "../style";
-import { Widget } from "../widget";
-import { ContainerWidget } from "../widget_container";
+import { style_wrapper_case } from "../style/style";
+import { Widget } from "../widget/widget";
+import { ContainerWidget } from "../widget/widget_container";
 
 
 export enum flex_direction_e {
@@ -38,57 +38,62 @@ export enum flex_justify_e {
 }
 
 export type flex_options_t = {
-  direction?: flex_direction_e
-  wrap?: flex_wrap_e
-  align_content?: flex_align_content_e
-  align_items?: flex_align_items_e
+  direction?: flex_direction_e,
+  wrap?: flex_wrap_e,
+  align_content?: flex_align_content_e,
+  align_items?: flex_align_items_e,
   justify_content?: flex_justify_e,
-  height?: number,
-  width?: number
+  row_gap?: string
+  column_gap?: string
+  height?: string,
+  width?: string
 }
 
 const DEFAULT_FLEX_OPTIONS: flex_options_t = {
   direction: flex_direction_e.row,
 }
 
-export const filter_object = (object: {[index: string]: any}, callback: (key, value) => boolean) => {
+export const filter_object = (object: { [index: string]: any }, callback: (key, value) => boolean) => {
   const entries = Object.entries(object).map(([key, value]) => {
-    if(callback(key, value))
+    if (callback(key, value))
       return [key, value]
-    else 
+    else
       return null
   }).filter(item => !!item)
   return Object.fromEntries(entries)
 }
 
-export function Flex(widgets: (Widget|ContainerWidget)[], options: flex_options_t = DEFAULT_FLEX_OPTIONS): ContainerWidget {
+export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_options_t = DEFAULT_FLEX_OPTIONS): ContainerWidget {
   const container = new ContainerWidget()
   options = { ...DEFAULT_FLEX_OPTIONS, ...options }
   const flex_config = {
     display: 'flex',
-    flexDirection: options.direction,
-    flexWrap: options.wrap,
-    alignContent: options.align_content,
-    alignItems: options.align_items,
-    justifyContent: options.justify_content,
-    height: options.height + 'px',
-    width: options.width + 'px'
+    flexDirection: options?.direction,
+    flexWrap: options?.wrap,
+    alignContent: options?.align_content,
+    alignItems: options?.align_items,
+    justifyContent: options?.justify_content,
+    rowGap: options?.row_gap,
+    columnGap: options?.column_gap,
+    height: options?.height,
+    width: options?.width
   }
-  container.attribute = {
-    style: style_wrapper(
-      filter_object(flex_config, 
-        (key, value) => {
-          if((key == 'height' || key == 'width') && value.startsWith('undefined'))
-            return false
-          return !!value
-        }
-      )
-    )
-  }
+  filter_object(flex_config,
+    (key, value) => {
+      if (value?.startsWith('undefined'))
+        return false
+      if(!!value){
+        container.style[key] = value
+      }
+    }
+  )
   widgets.forEach(item => {
     container.add(item)
   })
-  container.build()
-  container.render()
+  container.build_all()
+  container.render({
+    with_attributes: true,
+    with_markdown: true
+  })
   return container
 }

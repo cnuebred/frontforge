@@ -26,7 +26,7 @@ const app = async (script_name:string) => {
 - style:  ${style.length}
 - full:   ${style.length + script.length}
 `)
-  bundle.build(script_name, './tests/build')
+  bundle.build(`./tests/build/${script_name}.html`)
 }
 
 tests.forEach(item => {

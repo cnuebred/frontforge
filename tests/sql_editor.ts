@@ -1,6 +1,6 @@
-import { Pocket } from "../src/pocket";
-import { Widget } from "../src/widget";
-import { ContainerWidget } from "../src/widget_container";
+import { Pocket } from "../src/index";
+import { Widget } from "../src/index";
+import { ContainerWidget } from "../src/index";
 
 class TableWidget extends ContainerWidget {
   headers: string[];
@@ -100,4 +100,4 @@ appContainer.add(sqlOutput);
 
 // Podłączenie do DOM
 appContainer.hook('app');
-appContainer.build();
+appContainer.build_all();

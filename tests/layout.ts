@@ -1,4 +1,4 @@
-import { Widget } from '../src/widget'
+import { Widget } from '../src/widget/widget'
 import {  Flex, flex_direction_e, flex_justify_e } from '../src/modules/flex'
 import { Grid } from '../src/modules/grid'
 
@@ -21,7 +21,7 @@ const row = Flex([
 ], {
   direction: flex_direction_e.row,
   justify_content: flex_justify_e.space_between,
-  height: 150
+  height: '150px'
 })
 
 
@@ -33,8 +33,11 @@ const grid = Grid([
     widget: new Widget('span.cell', 'Strona 1.2'), 
     row_span:'span 3'
   }],
-  [new Widget('span.cell', 'Strona 2.1'), null],
-  [null, new Widget('span.cell', 'Strona 4.1')],
-  [new Widget('span.cell', 'Strona 3.1'), new Widget('span.cell', 'Strona 3.2')],
-])
+  [new Widget('span', 'Strona 2.1'), null],
+  [null, new Widget('span', 'Strona 4.1')],
+  [new Widget('span', 'Strona 3.1'), new Widget('span', 'Strona 3.2')],
+], {
+  column_gap: '10px',
+  row_gap: '10px'
+})
 grid.hook('app')
