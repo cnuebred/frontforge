@@ -178,7 +178,8 @@ export class Widget {
       this.root = root as HTMLElement
       this.root.append(this.self)
     }
-
+    // TODO add more functions to events handler
+    // worker after build all or sth like this
     return this
   }
   show_when(callback?: () => boolean) {

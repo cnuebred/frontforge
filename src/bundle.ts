@@ -93,7 +93,7 @@ export class ForgeBundle {
       this.#head.push(
         `<script ${Object.entries(script_obj).map(([key, value]) => `${key}="${value}"`
         ).join(' ')
-        }>`),
+        }></script>`),
   }
   async style(path: string) {
     const text = await readFileSync(path)
