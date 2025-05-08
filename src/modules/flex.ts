@@ -63,8 +63,11 @@ export const filter_object = (object: { [index: string]: any }, callback: (key, 
   return Object.fromEntries(entries)
 }
 
-export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_options_t = DEFAULT_FLEX_OPTIONS): ContainerWidget {
-  const container = new ContainerWidget()
+export function WrapFlex(
+  container: ContainerWidget,
+  widgets: (Widget | ContainerWidget)[],
+  options: flex_options_t = DEFAULT_FLEX_OPTIONS): void {
+
   options = { ...DEFAULT_FLEX_OPTIONS, ...options }
   const flex_config = {
     display: 'flex',
@@ -82,7 +85,7 @@ export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_option
     (key, value) => {
       if (value?.startsWith('undefined'))
         return false
-      if(!!value){
+      if (!!value) {
         container.style[key] = value
       }
     }
@@ -95,5 +98,11 @@ export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_option
     with_attributes: true,
     with_markdown: true
   })
+
+}
+
+export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_options_t = DEFAULT_FLEX_OPTIONS): ContainerWidget {
+  const container = new ContainerWidget()
+  WrapFlex(container, widgets, options)
   return container
 }

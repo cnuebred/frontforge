@@ -5,12 +5,19 @@ export class ContainerWidget extends Widget {
   widgets: () => Widget[]
   check_instance = () => 'container_widget'
 
+  get size() {
+    return this.#children.length
+  }
+
   constructor(tag: string = 'div') {
     super(tag, '')
   }
   clear() {
     this.#children.forEach(item => item.unhook())
     this.#children = []
+  }
+  set(widgets: (Widget | ContainerWidget)[]){
+    this.#children = widgets
   }
   foreach_children(callback: (item: Widget | ContainerWidget, index: number) => void) {
     this.#children.forEach(callback)
