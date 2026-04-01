@@ -1,4 +1,5 @@
 import {ForgeBundle} from '../src/bundle'
+import router from './router'
 
 
 const tests = [
@@ -19,7 +20,8 @@ const app = async (script_name:string) => {
     content:"width=device-width, initial-scale=1.0",
     name: 'viewport'
   })
-  const script = await bundle.script(`./tests/${script_name}.ts`)
+  console.log(router.layout)
+  const script = await bundle.script(router.layout)
   const style = await bundle.style('./tests/style.scss')
   console.log(`[${script_name}]
 - script: ${script.length}
@@ -29,6 +31,7 @@ const app = async (script_name:string) => {
   bundle.build(`./tests/build/${script_name}.html`)
 }
 
-tests.forEach(item => {
-  app(item)
-})
+// tests.forEach(item => {
+//   app(item)
+// })
+app('layout')

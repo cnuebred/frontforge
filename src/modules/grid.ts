@@ -41,6 +41,7 @@ export type grid_options_t = {
   gridTemplateRows?: string
   column_gap?: string
   row_gap?: string
+  gridAreaAuto?: boolean
 }
 
 
@@ -78,7 +79,8 @@ export function WrapGrid(
       rowGap: options?.row_gap,
       columnGap: options?.column_gap,
       height: options?.height,
-      width: options?.width 
+      width: options?.width,
+      gridAreaAuto: options?.gridAreaAuto
     }
   
     filter_object(grid_config,
@@ -94,15 +96,16 @@ export function WrapGrid(
     widgets.forEach((rows, index_row: number) => {
       rows.forEach((item, index_col: number) => {
         if (!item) return
-        if (item instanceof Widget) {
-          item.style.gridColumn = `${index_col + 1}`
-          item.style.gridRow = `${index_row + 1}`
-        }
-        else {
-          const col_span = item.col_span ? ` / ${item.col_span}` : ''
-          const row_span = item.row_span ? ` / ${item.row_span}` : ''
-          item.widget.style.gridColumn = `${index_col + 1}${col_span}`
-          item.widget.style.gridRow = `${index_row + 1}${row_span}`
+        if(grid_config.gridAreaAuto){
+          if (item instanceof Widget) {
+            item.style.gridColumn = `${index_col + 1}`
+            item.style.gridRow = `${index_row + 1}`
+          } else {
+            const col_span = item.col_span ? ` / ${item.col_span}` : ''
+            const row_span = item.row_span ? ` / ${item.row_span}` : ''
+            item.widget.style.gridColumn = `${index_col + 1}${col_span}`
+            item.widget.style.gridRow = `${index_row + 1}${row_span}`
+          }
         }
       })
     })
