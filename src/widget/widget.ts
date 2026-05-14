@@ -59,7 +59,7 @@ export class Widget {
   root: HTMLElement
   #content: (() => string) | string
   #attribute: (() => attr_t) | attr_t
-  #markdown_content: boolean = false
+  #markdown_content: boolean = null
   events: [string, (event: Event) => void][] = []
   style: CSSStyleDeclaration // buuu CamelCase :<
   class: element_class_operator_t
@@ -146,11 +146,20 @@ export class Widget {
     }
 
     this.render_display()
-    if (this.#markdown_content || render_options.with_markdown) {
-      this.self.innerHTML = this.convert_markdown_to_html(this.content)
-    } else {
-      this.self.innerHTML = this.content
+    if(this.#markdown_content == null || this.#markdown_content == undefined){
+      if (render_options.with_markdown) {
+        this.self.innerHTML = this.convert_markdown_to_html(this.content)
+      } else {
+        this.self.innerHTML = this.content
+      }
+    }else{
+      if (this.#markdown_content) {
+        this.self.innerHTML = this.convert_markdown_to_html(this.content)
+      } else {
+        this.self.innerHTML = this.content
+      }
     }
+
 
     this.apply_attributes_by_object(this.attribute)
 
