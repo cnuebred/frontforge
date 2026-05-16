@@ -20,8 +20,11 @@ export class ContainerWidget extends Widget {
   set(widgets: (Widget | ContainerWidget)[]){
     this.#children = widgets
   }
-  foreach_children(callback: (item: Widget | ContainerWidget, index: number) => void) {
+  foreach(callback: (item: Widget | ContainerWidget, index: number, arr: (Widget | ContainerWidget)[]) => void) {
     this.#children.forEach(callback)
+  }
+  map(callback: (item: Widget | ContainerWidget, index: number, arr: (Widget | ContainerWidget)[]) => Widget | ContainerWidget) {
+    this.#children.map(callback)
   }
   render(render_options: render_options_t = DEFAULT_RENDER_OPTIONS) {
     if (!render_options.with_attributes) {
