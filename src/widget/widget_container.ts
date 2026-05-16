@@ -24,7 +24,7 @@ export class ContainerWidget extends Widget {
     this.#children.forEach(callback)
   }
   map(callback: (item: Widget | ContainerWidget, index: number, arr: (Widget | ContainerWidget)[]) => Widget | ContainerWidget) {
-    this.#children.map(callback)
+    this.#children = this.#children.map(callback)
   }
   render(render_options: render_options_t = DEFAULT_RENDER_OPTIONS) {
     if (!render_options.with_attributes) {
