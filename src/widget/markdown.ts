@@ -1,5 +1,13 @@
-
 export const text_to_markdown = (text: string): string => {
+    if (!text) return '';
+
+    text = text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
     text = text
         .replace(/(?<!\\)\*\*(.*?)\*\*/g, '<b>$1</b>')
         .replace(/(?<!\\)\*(.*?)\*/g, '<i>$1</i>')
@@ -14,7 +22,15 @@ export const text_to_markdown = (text: string): string => {
         .replace(/(?<!\\)^#### (.*$)/gim, '<h4>$1</h4>')
         .replace(/(?<!\\)^##### (.*$)/gim, '<h5>$1</h5>')
         .replace(/(?<!\\)^###### (.*$)/gim, '<h6>$1</h6>')
-        .replace(/(?<!\\)\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>')
+        
+        .replace(/(?<!\\)\[(.*?)\]\((.*?)\)/g, (match, label, url) => {
+            const cleanUrl = url.trim().toLowerCase();
+            if (cleanUrl.startsWith('javascript:') || cleanUrl.startsWith('data:') || cleanUrl.startsWith('vbscript:')) {
+                return `<a href="#" class="text-danger" title="Zablokowano niebezpieczny link">${label}</a>`;
+            }
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+        })
+        
         .replace(/\\([_*`~[\]()])/g, '$1');
 
     return text;
