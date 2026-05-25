@@ -1,9 +1,14 @@
+import { BooleanLiteral } from "typescript"
 import {  DEFAULT_RENDER_OPTIONS, render_options_t, Widget } from "./widget"
 
 export class ContainerWidget extends Widget {
   #children: Widget[] = []
   widgets: () => Widget[]
   check_instance = () => 'container_widget'
+
+  get size() {
+    return this.#children.length
+  }
 
   constructor(tag: string = 'div') {
     super(tag, '')
@@ -12,8 +17,16 @@ export class ContainerWidget extends Widget {
     this.#children.forEach(item => item.unhook())
     this.#children = []
   }
-  foreach_children(callback: (item: Widget | ContainerWidget, index: number) => void) {
+  set(widgets: (Widget | ContainerWidget)[]){
+    this.#children = widgets
+  }
+  foreach(callback: (item: Widget | ContainerWidget, index: number, arr: (Widget | ContainerWidget)[]) => void) {
     this.#children.forEach(callback)
+  }
+  map(callback: (item: Widget | ContainerWidget, index: number, arr: (Widget | ContainerWidget)[]) => Widget | ContainerWidget) {
+    const tmp = [...this.#children]
+    this.clear()
+    this.#children = tmp.map(callback)
   }
   render(render_options: render_options_t = DEFAULT_RENDER_OPTIONS) {
     if (!render_options.with_attributes) {

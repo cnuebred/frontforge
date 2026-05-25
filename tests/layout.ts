@@ -2,8 +2,6 @@ import { Widget } from '../src/widget/widget'
 import {  Flex, flex_direction_e, flex_justify_e } from '../src/modules/flex'
 import { Grid } from '../src/modules/grid'
 
-
-
 const row = Flex([
   new Widget('span.cell', 'Strona 1'),
   new Widget('span.cell', 'Strona 2'),
@@ -41,3 +39,5 @@ const grid = Grid([
   row_gap: '10px'
 })
 grid.hook('app')
+
+

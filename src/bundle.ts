@@ -137,6 +137,7 @@ export class ForgeBundle {
     this.#script.push(result.outputFiles[0].text)
     return result.outputFiles[0].text
   }
+
   async build(path_to_save_file?: string) {
     const html_struct = `<html>
       <head>${this.#head.join('\n')}</head>
