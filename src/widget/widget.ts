@@ -1,4 +1,3 @@
-import { instances } from "../types"
 import { randomBytes } from 'crypto-browserify'
 
 import { ContainerWidget } from "./widget_container"
