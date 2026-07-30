@@ -1,4 +1,4 @@
-import { instances } from "../d"
+import { instances } from "../types"
 import { randomBytes } from 'crypto-browserify'
 
 import { ContainerWidget } from "./widget_container"
@@ -207,6 +207,7 @@ export class Widget {
     const widget = new Widget(this.tag)
 
     widget.self = (this.self.cloneNode(true) as HTMLElement)
+    widget.self.setAttribute('v', widget.hash)
     widget.style = widget.self.style
     
     widget.attribute = this.#attribute
