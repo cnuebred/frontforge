@@ -3,7 +3,6 @@ import {  DEFAULT_RENDER_OPTIONS, render_options_t, Widget } from "./widget"
 export class ContainerWidget extends Widget {
   #children: Widget[] = []
   widgets: () => Widget[]
-  check_instance = () => 'container_widget'
 
   get size() {
     return this.#children.length

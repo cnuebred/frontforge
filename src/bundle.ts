@@ -1,4 +1,4 @@
-import { assert } from 'console'
+import assert from 'node:assert'
 import esbuild, { transform } from 'esbuild'
 import { readFileSync, writeFile } from 'fs'
 import { compileString } from 'sass'

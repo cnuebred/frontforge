@@ -67,7 +67,6 @@ export class Widget {
   pinned: boolean = false
   //functions
   show: () => boolean = null
-  check_instance = () => 'widget'
   readonly query: string
   readonly hash: string
 
@@ -183,13 +182,13 @@ export class Widget {
       this.root.append(this.self)
     }
 
-    if (query instanceof Widget && query.check_instance() == instances.CONTAINER_WIDGET) {
+    if (query instanceof ContainerWidget) {
       query.add(this)
     } else {
       const root = (typeof (query) == 'string' ? document.querySelector(query) : query) as HTMLElement
       this.pinned = true
 
-      if (this.check_instance() == instances.CONTAINER_WIDGET) {
+      if (this instanceof ContainerWidget) {
         (this as unknown as ContainerWidget).build_all() // really bad code, idk how to do this better
       }
       this.root = root as HTMLElement
