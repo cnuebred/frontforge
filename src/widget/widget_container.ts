@@ -48,6 +48,7 @@ export class ContainerWidget extends Widget {
     if (with_hook){
       widget.hook(this.self)
     }
+    return this
   }
   remove(widget: Widget) {
     this.#children = this.#children.filter(item => item.hash != widget.hash)
