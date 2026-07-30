@@ -1,6 +1,6 @@
-import { style_wrapper_case } from "../style/style";
 import { Widget } from "../widget/widget";
 import { ContainerWidget } from "../widget/widget_container";
+import { filter_object } from "../utils/utils";
 
 
 export enum flex_direction_e {
@@ -51,16 +51,6 @@ export type flex_options_t = {
 
 const DEFAULT_FLEX_OPTIONS: flex_options_t = {
   direction: flex_direction_e.row,
-}
-
-export const filter_object = (object: { [index: string]: any }, callback: (key, value) => boolean) => {
-  const entries = Object.entries(object).map(([key, value]) => {
-    if (callback(key, value))
-      return [key, value]
-    else
-      return null
-  }).filter(item => !!item)
-  return Object.fromEntries(entries)
 }
 
 export function WrapFlex(

@@ -1,4 +1,3 @@
-import { BooleanLiteral } from "typescript"
 import {  DEFAULT_RENDER_OPTIONS, render_options_t, Widget } from "./widget"
 
 export class ContainerWidget extends Widget {

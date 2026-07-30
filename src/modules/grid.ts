@@ -1,6 +1,6 @@
-import { style_wrapper_case } from "../style/style";
 import { Widget } from "../widget/widget";
 import { ContainerWidget } from "../widget/widget_container";
+import { filter_object } from "../utils/utils";
 
 export enum grid_align_content_e {
   center = 'center',
@@ -52,16 +52,6 @@ export type grid_widget_item_t = {
 }
 
 const DEFAULT_GRID_OPTIONS: grid_options_t = {} // TODO... or not
-
-export const filter_object = (object: { [index: string]: any }, callback: (key, value) => boolean) => {
-  const entries = Object.entries(object).map(([key, value]) => {
-    if (callback(key, value))
-      return [key, value]
-    else
-      return null
-  }).filter(item => !!item)
-  return Object.fromEntries(entries)
-}
 
 export function WrapGrid(
   container: ContainerWidget, 
