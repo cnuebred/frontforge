@@ -3,21 +3,13 @@ import { randomBytes } from 'crypto-browserify'
 import { ContainerWidget } from "./widget_container"
 import { string_contain } from "../utils/utils"
 import { text_to_markdown } from "./markdown"
+import { attributes_t, clone_options_t, widget_render_option_t } from "../types"
 
-type attr_value_t = string | number | boolean | null
-type attr_t = { [index: string]: attr_value_t }
-
-/** Opcje klonowania widgetu */
-export type clone_options_t = {
-  /** Czy skopiować event listenery (domyślnie: true) */
-  with_events?: boolean
-}
+export type { clone_options_t } from "../types"
 
 export const DEFAULT_CLONE_OPTIONS: clone_options_t = {
   with_events: true
 }
-
-// to move
 
 const get_value_from_function_or_property =
   <T>(maybe_function: (() => T) | T): T => {
@@ -27,21 +19,13 @@ const get_value_from_function_or_property =
     return maybe_function
   }
 
-// to move 
-
 type element_class_operator_t = {
   add: (class_name: string) => void
   toggle: (class_name: string) => void
   remove: (class_name: string) => void
 }
 
-/** Opcje renderowania widgetu */
-export type render_options_t = {
-  /** Czy zastosować atrybuty HTML (domyślnie: true) */
-  with_attributes: boolean,
-  /** Czy parsować Markdown w treści (domyślnie: true) */
-  with_markdown: boolean
-}
+export type render_options_t = widget_render_option_t
 
 export const DEFAULT_RENDER_OPTIONS: render_options_t = {
   with_attributes: true,
@@ -140,10 +124,10 @@ export class Widget {
     this.#content = text
   }
   /** Atrybuty HTML widgetu (obiekt lub funkcja zwracająca obiekt) */
-  set attribute(attr: (() => attr_t) | attr_t) {
+  set attribute(attr: (() => Attr) | Attr) {
     this.#attribute = attr
   }
-  get attribute(): attr_t {
+  get attribute(): Attr {
     return get_value_from_function_or_property(this.#attribute)
   }
 
@@ -157,7 +141,7 @@ export class Widget {
       this.self.removeAttribute(this.self.attributes[i].name)
     }
   }
-  protected apply_attributes_by_object(attributes: attr_t) {
+  protected apply_attributes_by_object(attributes: Attr[]) {
     for (const index in attributes) {
       if (attributes[index])
         this.self.setAttribute(index.toString(), attributes[index].toString())
