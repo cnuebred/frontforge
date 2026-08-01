@@ -101,14 +101,15 @@ export class Widget {
    * @param value - treść tekstowa lub funkcja zwracająca treść (dynamiczna)
    */
   constructor(tag: string = 'div', value: (() => string) | string = '') {
-    let tag_class_exclusives = []
+    let tag_class_exclusives: string[] = []
 
     if (string_contain(tag, '.')) {
       tag_class_exclusives = tag.split('.')
-      tag = tag_class_exclusives.shift()
+      tag = tag_class_exclusives.shift() || 'div'
     }
+    
+    this.tag = tag || 'div'
 
-    this.tag = tag
     this.hash = randomBytes(4).toString('hex')
     this.query = `${this.tag}[v=${this.hash}]`
 
@@ -158,7 +159,10 @@ export class Widget {
   }
   protected apply_attributes_by_object(attributes: attr_t) {
     for (const index in attributes) {
-      this.self.setAttribute(index.toString(), attributes[index].toString())
+      if (attributes[index])
+        this.self.setAttribute(index.toString(), attributes[index].toString())
+      else
+        this.self.setAttribute(index.toString(), 'null')
     }
   }
   protected render_display(): boolean {
@@ -182,13 +186,13 @@ export class Widget {
     }
 
     this.render_display()
-    if(this.#markdown_content == null || this.#markdown_content == undefined){
+    if (this.#markdown_content == null || this.#markdown_content == undefined) {
       if (render_options.with_markdown) {
         this.self.innerHTML = this.convert_markdown_to_html(this.content)
       } else {
         this.self.innerHTML = this.content
       }
-    }else{
+    } else {
       if (this.#markdown_content) {
         this.self.innerHTML = this.convert_markdown_to_html(this.content)
       } else {
@@ -265,38 +269,7 @@ export class Widget {
     widget.self = (this.self.cloneNode(true) as HTMLElement)
     widget.self.setAttribute('v', widget.hash)
     widget.style = widget.self.style
-    
-    widget.attribute = this.#attribute
-    widget.content = this.#content
-    widget.show = this.show
-    widget.events = [...this.events]
 
-    if (clone_options.with_events)
-      this.events.forEach(([event_name, callback]) => {
-        widget.self.addEventListener(event_name, (event) => callback(event))
-      })
-
-    return widget
-  }
-}
-      this.root = root as HTMLElement
-      this.root.append(this.self)
-    }
-    // TODO add more functions to events handler
-    // worker after build all or sth like this
-    return this
-  }
-  show_when(callback?: () => boolean) {
-    this.show = callback
-    this.render_display()
-  }
-  clone(clone_options: clone_options_t = DEFAULT_CLONE_OPTIONS) {
-    const widget = new Widget(this.tag)
-
-    widget.self = (this.self.cloneNode(true) as HTMLElement)
-    widget.self.setAttribute('v', widget.hash)
-    widget.style = widget.self.style
-    
     widget.attribute = this.#attribute
     widget.content = this.#content
     widget.show = this.show
