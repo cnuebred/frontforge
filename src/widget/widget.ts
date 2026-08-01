@@ -59,9 +59,9 @@ export class Widget {
   /** The actual DOM element */
   self: HTMLElement
   /** Parent node in the DOM tree */
-  root: HTMLElement
-  #content: (() => string) | string
-  #attribute: (() => attributes_t) | attributes_t
+  root!: HTMLElement
+  #content!: (() => string) | string
+  #attribute!: (() => attributes_t) | attributes_t
   #markdown_content: boolean | null = null
   /** Registered event listeners */
   events: [string, (event: Event) => void][] = []
@@ -74,7 +74,7 @@ export class Widget {
   pinned: boolean = false
   //functions
   /** Conditional display callback (show_when) */
-  show: () => boolean = null
+  show: (() => boolean) | null = null
   /** CSS selector to locate the element in the DOM (tag[v=hash]) */
   readonly query: string
   /** Unique widget identifier (8 hex characters) */
@@ -111,7 +111,7 @@ export class Widget {
   get markdown_content() {
     return this.#markdown_content
   }
-  set markdown_content(value: boolean) {
+  set markdown_content(value: boolean | null) {
     this.#markdown_content = value
   }
 
