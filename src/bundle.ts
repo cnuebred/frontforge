@@ -114,6 +114,7 @@ export class ForgeBundle {
       bundle: true,
       outfile: 'output.js',
       format: 'esm',
+      globalName: 'FrontForge',
       platform: 'browser',
       minify: true,
       target: 'es2020',
