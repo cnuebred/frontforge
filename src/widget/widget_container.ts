@@ -162,6 +162,17 @@ export class ContainerWidget extends Widget {
     if (with_hook) widget.hook(this.self)
     return this
   }
+  /**
+   * Push a widget at the last position.
+   * Optionally renders and attaches to the DOM.
+   * @returns `this` – enables chaining
+   */
+  push(widget: Widget, with_render?: boolean, with_hook?: boolean): this {
+    this.#children.push(widget)
+    if (with_render) widget.render()
+    if (with_hook) widget.hook(this.self)
+    return this
+  }
 
   /**
    * Builds all children – renders and attaches them to the container's DOM.

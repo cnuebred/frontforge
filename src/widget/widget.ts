@@ -1,6 +1,7 @@
 import { randomBytes } from 'crypto-browserify'
 
-import { ContainerWidget } from "./widget_container"
+// NOTE: ContainerWidget import removed to break circular dependency
+// (widget.ts ↔ widget_container.ts). Duck-type check used in hook() instead.
 import { string_contain } from "../utils/utils"
 import { text_to_markdown } from "./markdown"
 import { attributes_t, clone_options_t, widget_render_option_t } from "../types"
@@ -235,7 +236,7 @@ export class Widget {
    * @param query - CSS selector, DOM element, or ContainerWidget
    * @returns `this` – enables chaining
    */
-  hook(query?: string | Element | ContainerWidget) {
+  hook(query?: string | Element | { add: (w: Widget, r?: boolean, h?: boolean) => any, self: HTMLElement, build_all?: () => void }) {
     if (this.pinned) return this
 
     if (!query && !!this.root) {
@@ -244,7 +245,8 @@ export class Widget {
       return this
     }
 
-    if (query instanceof ContainerWidget) {
+    // Duck-type check for ContainerWidget (avoids circular import)
+    if (query && typeof query === 'object' && 'add' in query && 'self' in query && !(query instanceof Element)) {
       query.add(this, true, true)
       this.pinned = true
       this.root = query.self
@@ -254,8 +256,8 @@ export class Widget {
       this.root.append(this.self)
       this.pinned = true
 
-      if (this instanceof ContainerWidget) {
-        (this as unknown as ContainerWidget).build_all()
+      if ('build_all' in this && typeof (this as any).build_all === 'function') {
+        (this as any).build_all()
       }
     }
     return this
