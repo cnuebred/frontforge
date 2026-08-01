@@ -168,11 +168,8 @@ export class Widget {
     }
   }
   protected apply_attributes_by_object(attributes: attributes_t) {
-    for (const index in attributes) {
-      if (attributes[index])
-        this.self.setAttribute(index.toString(), attributes[index].toString())
-      else
-        this.self.setAttribute(index.toString(), 'null')
+    for (const key in attributes) {
+      this.attr(key, attributes[key])
     }
   }
   protected render_display(): boolean {
@@ -278,7 +275,7 @@ export class Widget {
 
     widget.self = (this.self.cloneNode(true) as HTMLElement)
     widget.self.setAttribute('v', widget.hash)
-    widget.style = widget.self.style
+    widget.class = element_class_operators(widget.self)
 
     widget.attribute = this.#attribute
     widget.content = this.#content
