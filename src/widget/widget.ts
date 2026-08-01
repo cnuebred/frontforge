@@ -41,48 +41,48 @@ const element_class_operators = (self: HTMLElement): element_class_operator_t =>
 }
 
 /**
- * Podstawowy budulec UI – reprezentuje pojedynczy element HTML.
+ * Core UI building block – represents a single HTML element.
  * 
- * Obsługuje składnię Emmet (np. `"button.btn.btn-primary"`),
- * dynamiczną treść przez callback, Markdown, eventy i klonowanie.
+ * Supports Emmet-like syntax (e.g. `"button.btn.btn-primary"`),
+ * dynamic content via callback, Markdown rendering, event binding, and cloning.
  * 
  * @example
  * ```ts
- * const btn = new Widget("button.btn", "Kliknij mnie!")
- * btn.event("click", () => console.log("klik!"))
+ * const btn = new Widget("button.btn", "Click me!")
+ * btn.event("click", () => console.log("clicked!"))
  * btn.hook("body")
  * ```
  */
 export class Widget {
-  /** Nazwa znacznika HTML (np. "div", "button") */
+  /** HTML tag name (e.g. "div", "button") */
   tag: string
-  /** Rzeczywisty element DOM */
+  /** The actual DOM element */
   self: HTMLElement
-  /** Rodzic w drzewie DOM */
+  /** Parent node in the DOM tree */
   root: HTMLElement
   #content: (() => string) | string
   #attribute: (() => attributes_t) | attributes_t
   #markdown_content: boolean | null = null
-  /** Zarejestrowane event listenery */
+  /** Registered event listeners */
   events: [string, (event: Event) => void][] = []
-  /** Operatory klas CSS (add, toggle, remove) */
+  /** CSS class operators (add, toggle, remove) */
   class: element_class_operator_t
-  /** Styl inline – zawsze odnosi się do `this.self.style` (getter) */
+  /** Inline style – always refers to `this.self.style` (getter) */
   get style(): CSSStyleDeclaration { return this.self.style }
   //states 
-  /** Czy widget jest podpięty do DOM */
+  /** Whether the widget is attached to the DOM */
   pinned: boolean = false
   //functions
-  /** Callback warunkowego wyświetlania (show_when) */
+  /** Conditional display callback (show_when) */
   show: () => boolean = null
-  /** Selektor CSS do znalezienia elementu w DOM (tag[v=hash]) */
+  /** CSS selector to locate the element in the DOM (tag[v=hash]) */
   readonly query: string
-  /** Unikalny identyfikator widgetu (8 znaków hex) */
+  /** Unique widget identifier (8 hex characters) */
   readonly hash: string
 
   /**
-   * @param tag - znacznik HTML, opcjonalnie z klasami po kropce (np. `"div.card.shadow"`)
-   * @param value - treść tekstowa lub funkcja zwracająca treść (dynamiczna)
+   * @param tag - HTML tag, optionally with dot-separated classes (e.g. `"div.card.shadow"`)
+   * @param value - text content or a function returning content (dynamic)
    */
   constructor(tag: string = 'div', value: (() => string) | string = '') {
     let tag_class_exclusives: string[] = []
@@ -107,7 +107,7 @@ export class Widget {
     }
   }
 
-  /** Czy treść ma być parsowana jako Markdown (nadpisuje render_options.with_markdown) */
+  /** Whether content should be parsed as Markdown (overrides render_options.with_markdown) */
   get markdown_content() {
     return this.#markdown_content
   }
@@ -115,14 +115,14 @@ export class Widget {
     this.#markdown_content = value
   }
 
-  /** Aktualna treść tekstowa widgetu (wywołuje callback jeśli podano funkcję) */
+  /** Current text content of the widget (calls the callback if a function was provided) */
   get content(): string {
     return get_value_from_function_or_property(this.#content)
   }
   set content(text: (() => string) | string) {
     this.#content = text
   }
-  /** Atrybuty HTML widgetu (obiekt lub funkcja zwracająca obiekt) */
+  /** HTML attributes of the widget (object or function returning an object) */
   set attribute(attr: (() => attributes_t) | attributes_t) {
     this.#attribute = attr
   }
@@ -131,10 +131,10 @@ export class Widget {
   }
 
   /**
-   * Ustawia pojedynczy atrybut HTML (fluent API).
-   * @param key - nazwa atrybutu (np. "id", "data-value")
-   * @param value - wartość; `null` usuwa atrybut, `false`/`undefined` pomija
-   * @returns `this` – umożliwia chainowanie
+   * Sets a single HTML attribute (fluent API).
+   * @param key - attribute name (e.g. "id", "data-value")
+   * @param value - the value; `null` removes the attribute, `false`/`undefined` skips
+   * @returns `this` – enables chaining
    */
   attr(key: string, value: string | number | boolean | null): this {
     if (value === null) {
@@ -146,9 +146,9 @@ export class Widget {
   }
 
   /**
-   * Ustawia wiele atrybutów HTML naraz (fluent API).
-   * @param attributes - obiekt mapujący nazwy na wartości
-   * @returns `this` – umożliwia chainowanie
+   * Sets multiple HTML attributes at once (fluent API).
+   * @param attributes - object mapping names to values
+   * @returns `this` – enables chaining
    */
   attrs(attributes: attributes_t): this {
     for (const key in attributes) {
@@ -184,8 +184,8 @@ export class Widget {
   }
 
   /**
-   * Renderuje widget do DOM (innerHTML + atrybuty + warunkowe wyświetlanie).
-   * @returns `this` – umożliwia chainowanie
+   * Renders the widget into the DOM (innerHTML + attributes + conditional display).
+   * @returns `this` – enables chaining
    */
   render(render_options: render_options_t = DEFAULT_RENDER_OPTIONS) {
     if (!render_options.with_attributes) {
@@ -212,17 +212,17 @@ export class Widget {
     return this
   }
   /**
-   * Rejestruje event listener na elemencie DOM.
-   * @param event_name - nazwa zdarzenia (np. "click", "input")
-   * @param callback - funkcja wywoływana przy zdarzeniu
-   * @returns `this` – umożliwia chainowanie
+   * Registers an event listener on the DOM element.
+   * @param event_name - event name (e.g. "click", "input")
+   * @param callback - function called when the event fires
+   * @returns `this` – enables chaining
    */
   event(event_name: string, callback: (event: Event) => void): this {
     this.events.push([event_name, callback])
     this.self.addEventListener(event_name, (event) => callback(event))
     return this
   }
-  /** Odpina widget od DOM (usuwa element z rodzica) */
+  /** Detaches the widget from the DOM (removes the element from its parent) */
   unhook() {
     if (!this.pinned) return this
 
@@ -230,9 +230,9 @@ export class Widget {
     this.root.removeChild(this.self)
   }
   /**
-   * Podpina widget do DOM.
-   * @param query - selektor CSS, element DOM lub ContainerWidget
-   * @returns `this` – umożliwia chainowanie
+   * Attaches the widget to the DOM.
+   * @param query - CSS selector, DOM element, or ContainerWidget
+   * @returns `this` – enables chaining
    */
   hook(query?: string | Element | ContainerWidget) {
     if (this.pinned) return this
@@ -258,17 +258,17 @@ export class Widget {
     return this
   }
   /**
-   * Warunkowe wyświetlanie widgetu.
-   * @param callback - funkcja zwracająca `true` (widoczny) lub `false` (display: none)
+   * Conditional display of the widget.
+   * @param callback - function returning `true` (visible) or `false` (display: none)
    */
   show_when(callback?: () => boolean) {
     this.show = callback
     this.render_display()
   }
   /**
-   * Tworzy głęboką kopię widgetu (nowy element DOM, nowy hash).
-   * @param clone_options - opcje klonowania (domyślnie kopiuje eventy)
-   * @returns nowa instancja Widget
+   * Creates a deep copy of the widget (new DOM element, new hash).
+   * @param clone_options - cloning options (defaults to copying events)
+   * @returns a new Widget instance
    */
   clone(clone_options: clone_options_t = DEFAULT_CLONE_OPTIONS) {
     const widget = new Widget(this.tag)

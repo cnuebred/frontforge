@@ -1,10 +1,10 @@
 import {  DEFAULT_RENDER_OPTIONS, render_options_t, Widget } from "./widget"
 
 /**
- * Kontener na widgety – zarządza grupą elementów jako kolekcją.
+ * Widget container – manages a group of elements as a collection.
  * 
- * Dziedziczy po {@link Widget}, więc sam też jest elementem DOM.
- * Umożliwia operacje tablicowe (add, remove, foreach, map) na dzieciach.
+ * Extends {@link Widget}, so it is itself a DOM element.
+ * Provides array-like operations (add, remove, foreach, map) on children.
  * 
  * @example
  * ```ts
@@ -16,43 +16,43 @@ import {  DEFAULT_RENDER_OPTIONS, render_options_t, Widget } from "./widget"
  */
 export class ContainerWidget extends Widget {
   #children: Widget[] = []
-  /** Callback zwracający aktualną listę dzieci (do dynamicznych widoków) */
+  /** Callback returning the current list of children (for dynamic views) */
   widgets: () => Widget[]
 
-  /** Liczba dzieci w kontenerze */
+  /** Number of children in the container */
   get size() {
     return this.#children.length
   }
 
   /**
-   * @param tag - znacznik HTML kontenera (domyślnie "div")
+   * @param tag - HTML tag for the container (defaults to "div")
    */
   constructor(tag: string = 'div') {
     super(tag, '')
   }
-  /** Usuwa wszystkie dzieci z DOM i czyści kolekcję */
+  /** Removes all children from the DOM and clears the collection */
   clear() {
     this.#children.forEach(item => item.unhook())
     this.#children = []
   }
   /** 
-   * Zastępuje całą kolekcję dzieci nową tablicą.
-   * Stare dzieci są odpinane z DOM.
-   * @returns `this` – umożliwia chainowanie
+   * Replaces the entire child collection with a new array.
+   * Old children are detached from the DOM.
+   * @returns `this` – enables chaining
    */
   set(widgets: (Widget | ContainerWidget)[]): this {
     this.clear()
     this.#children = widgets
     return this
   }
-  /** Iteruje po wszystkich dzieciach (jak Array.forEach) */
+  /** Iterates over all children (like Array.forEach) */
   foreach(callback: (item: Widget | ContainerWidget, index: number, arr: (Widget | ContainerWidget)[]) => void) {
     this.#children.forEach(callback)
   }
   /** 
-   * Mapuje dzieci na nową kolekcję (jak Array.map).
-   * Stare dzieci są odpinane z DOM, nowe są renderowane i podpinane.
-   * @returns `this` – umożliwia chainowanie
+   * Maps children to a new collection (like Array.map).
+   * Old children are detached from the DOM, new ones are rendered and attached.
+   * @returns `this` – enables chaining
    */
   map(callback: (item: Widget | ContainerWidget, index: number, arr: (Widget | ContainerWidget)[]) => Widget | ContainerWidget): this {
     const tmp = [...this.#children]
@@ -65,8 +65,8 @@ export class ContainerWidget extends Widget {
     return this
   }
   /**
-   * Renderuje kontener i wszystkie dzieci.
-   * @returns `this` – umożliwia chainowanie
+   * Renders the container and all its children.
+   * @returns `this` – enables chaining
    */
   render(render_options: render_options_t = DEFAULT_RENDER_OPTIONS) {
     if (!render_options.with_attributes) {
@@ -81,11 +81,11 @@ export class ContainerWidget extends Widget {
     return this
   }
   /**
-   * Dodaje widget do kontenera.
-   * @param widget - widget do dodania
-   * @param with_render - czy od razu wywołać `render()` na widgecie
-   * @param with_hook - czy od razu podpiąć widget do DOM kontenera
-   * @returns `this` – umożliwia chainowanie
+   * Adds a widget to the container.
+   * @param widget - widget to add
+   * @param with_render - whether to immediately call `render()` on the widget
+   * @param with_hook - whether to immediately attach the widget to the container's DOM
+   * @returns `this` – enables chaining
    */
   add(widget: Widget, with_render?: boolean, with_hook?: boolean) {
     this.#children.push(widget)
@@ -100,8 +100,8 @@ export class ContainerWidget extends Widget {
     return this
   }
   /** 
-   * Usuwa widget z kontenera (po hash-u) i odpina go z DOM.
-   * @returns `this` – umożliwia chainowanie
+   * Removes a widget from the container (by hash) and detaches it from the DOM.
+   * @returns `this` – enables chaining
    */
   remove(widget: Widget): this {
     const target = this.#children.find(item => item.hash === widget.hash)
@@ -112,25 +112,25 @@ export class ContainerWidget extends Widget {
     return this
   }
   /**
-   * Znajduje widget po hash-u.
-   * @returns znaleziony widget lub `undefined`
+   * Finds a widget by its hash.
+   * @returns the found widget or `undefined`
    */
   find(hash: string): Widget | undefined {
     return this.#children.find(item => item.hash === hash)
   }
 
   /**
-   * Pobiera widget po indeksie (jak dostęp tablicowy).
-   * @returns widget na danej pozycji lub `undefined`
+   * Gets a widget by its index (like array access).
+   * @returns the widget at the given position or `undefined`
    */
   get(index: number): Widget | undefined {
     return this.#children[index]
   }
 
   /**
-   * Filtruje dzieci, usuwając te które nie przechodzą testu.
-   * Odrzucone widgety są odpinane z DOM.
-   * @returns `this` – umożliwia chainowanie
+   * Filters children, removing those that do not pass the test.
+   * Rejected widgets are detached from the DOM.
+   * @returns `this` – enables chaining
    */
   filter(callback: (item: Widget, index: number, arr: Widget[]) => boolean): this {
     const rejected = this.#children.filter((item, i, arr) => !callback(item, i, arr))
@@ -140,8 +140,8 @@ export class ContainerWidget extends Widget {
   }
 
   /**
-   * Usuwa widget na podanym indeksie i odpina go z DOM.
-   * @returns `this` – umożliwia chainowanie
+   * Removes the widget at the given index and detaches it from the DOM.
+   * @returns `this` – enables chaining
    */
   remove_at(index: number): this {
     if (index >= 0 && index < this.#children.length) {
@@ -152,9 +152,9 @@ export class ContainerWidget extends Widget {
   }
 
   /**
-   * Wstawia widget na podaną pozycję (0 = początek).
-   * Opcjonalnie renderuje i podpina do DOM.
-   * @returns `this` – umożliwia chainowanie
+   * Inserts a widget at the given position (0 = beginning).
+   * Optionally renders and attaches to the DOM.
+   * @returns `this` – enables chaining
    */
   insert_at(index: number, widget: Widget, with_render?: boolean, with_hook?: boolean): this {
     this.#children.splice(index, 0, widget)
@@ -164,9 +164,9 @@ export class ContainerWidget extends Widget {
   }
 
   /**
-   * Buduje wszystkie dzieci – renderuje i podpina do DOM kontenera.
-   * Przydatne przy pierwszym podpięciu kontenera do DOM.
-   * @param with_markdown - czy parsować Markdown w treści dzieci (domyślnie: true)
+   * Builds all children – renders and attaches them to the container's DOM.
+   * Useful when first attaching the container to the DOM.
+   * @param with_markdown - whether to parse Markdown in children's content (default: true)
    */
   build_all(with_markdown: boolean = true) {
     const children = this.#children.filter(item => !!item)
@@ -180,17 +180,17 @@ export class ContainerWidget extends Widget {
   }
 
   /**
-   * Odświeża kontener na żywo – odpina wszystkie dzieci z DOM,
-   * renderuje je ponownie i podpina z powrotem.
+   * Refreshes the container live – detaches all children from the DOM,
+   * re-renders them, and re-attaches them.
    * 
-   * Przydatne gdy dane się zmieniły, a nie chcesz tworzyć nowych widgetów.
+   * Useful when data has changed but you don't want to create new widgets.
    * 
-   * @param with_markdown - czy parsować Markdown (domyślnie: true)
-   * @returns `this` – umożliwia chainowanie
+   * @param with_markdown - whether to parse Markdown (default: true)
+   * @returns `this` – enables chaining
    * 
    * @example
    * ```ts
-   * // Po zmianie danych w modelu:
+   * // After changing data in the model:
    * data.items.push(newItem)
    * container.refresh()
    * ```
