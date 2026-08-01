@@ -157,9 +157,9 @@ export class ContainerWidget extends Widget {
    * @returns `this` – umożliwia chainowanie
    */
   insert_at(index: number, widget: Widget, with_render?: boolean, with_hook?: boolean): this {
+    this.#children.splice(index, 0, widget)
     if (with_render) widget.render()
     if (with_hook) widget.hook(this.self)
-    this.#children.splice(index, 0, widget)
     return this
   }
 
@@ -177,5 +177,34 @@ export class ContainerWidget extends Widget {
       })
       item.hook(this.self)
     })
+  }
+
+  /**
+   * Odświeża kontener na żywo – odpina wszystkie dzieci z DOM,
+   * renderuje je ponownie i podpina z powrotem.
+   * 
+   * Przydatne gdy dane się zmieniły, a nie chcesz tworzyć nowych widgetów.
+   * 
+   * @param with_markdown - czy parsować Markdown (domyślnie: true)
+   * @returns `this` – umożliwia chainowanie
+   * 
+   * @example
+   * ```ts
+   * // Po zmianie danych w modelu:
+   * data.items.push(newItem)
+   * container.refresh()
+   * ```
+   */
+  refresh(with_markdown: boolean = true): this {
+    const children = this.#children.filter(item => !!item)
+    children.forEach(item => item.unhook())
+    children.forEach(item => {
+      item.render({
+        with_attributes: true,
+        with_markdown: with_markdown
+      })
+      item.hook(this.self)
+    })
+    return this
   }
 }
