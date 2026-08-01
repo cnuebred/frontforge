@@ -78,7 +78,7 @@ export function WrapGrid(
   widgets: (Widget | grid_widget_item_t | ContainerWidget | null)[][], 
   options: grid_options_t = DEFAULT_GRID_OPTIONS): void {
     options = { ...DEFAULT_GRID_OPTIONS, ...options }
-    let grid_config = {
+    const grid_config = {
       display: 'grid',
       alignContent: options?.align_content,
       justifyContent: options?.justify_content,
@@ -90,15 +90,16 @@ export function WrapGrid(
       columnGap: options?.column_gap,
       height: options?.height,
       width: options?.width,
-      gridAreaAuto: options?.gridAreaAuto
     }
   
     apply_styles(container.self, grid_config)
   
+    const useAutoArea = options?.gridAreaAuto
+  
     widgets.forEach((rows, index_row: number) => {
       rows.forEach((item, index_col: number) => {
         if (!item) return
-        if(grid_config.gridAreaAuto){
+        if(useAutoArea){
           if (item instanceof Widget) {
             item.style.gridColumn = `${index_col + 1}`
             item.style.gridRow = `${index_row + 1}`
