@@ -130,6 +130,33 @@ export class Widget {
     return get_value_from_function_or_property(this.#attribute)
   }
 
+  /**
+   * Ustawia pojedynczy atrybut HTML (fluent API).
+   * @param key - nazwa atrybutu (np. "id", "data-value")
+   * @param value - wartość; `null` usuwa atrybut, `false`/`undefined` pomija
+   * @returns `this` – umożliwia chainowanie
+   */
+  attr(key: string, value: string | number | boolean | null): this {
+    if (value === null) {
+      this.self.removeAttribute(key)
+    } else if (value !== false && value !== undefined) {
+      this.self.setAttribute(key, String(value))
+    }
+    return this
+  }
+
+  /**
+   * Ustawia wiele atrybutów HTML naraz (fluent API).
+   * @param attributes - obiekt mapujący nazwy na wartości
+   * @returns `this` – umożliwia chainowanie
+   */
+  attrs(attributes: attributes_t): this {
+    for (const key in attributes) {
+      this.attr(key, attributes[key])
+    }
+    return this
+  }
+
   protected convert_markdown_to_html(text: string): string {
     return text_to_markdown(text)
   }
