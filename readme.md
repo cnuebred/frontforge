@@ -20,6 +20,7 @@ This project was created out of pure passion by a beginner developer who strongl
 - 📦 Auto HTML/JS/CSS bundling with `ForgeBundle`
 - ⚙️ Easy layout utilities via `Flex()` and `Grid()`
 - 🖱️ Simple event handling with `.event()`
+- 🏷️ Fluent attribute API with `.attr()` and `.attrs()`
 - 📄 Markdown-style inline content support
 - 💨 Minimal dependencies, zero-runtime abstraction
 
@@ -142,6 +143,20 @@ btn.attribute = {
 btn.style.backgroundColor = "#ff5722";  
 btn.style.borderRadius = "8px";
 
+// Fluent attribute API – set individual attributes with chainable .attr()  
+btn.attr("id", "submit-button")  
+   .attr("data-tooltip", "Sends the form securely")  
+   .attr("aria-label", "Submit Form");
+
+// Or set multiple attributes at once with .attrs()  
+btn.attrs({  
+  tabindex: 0,  
+  role: "button"  
+});
+
+// Remove an attribute by passing `null`  
+btn.attr("disabled", null);
+
 // Attach standardized event listeners  
 btn.event("click", (e) => {  
   console.log("Button clicked!", e);  
@@ -152,7 +167,7 @@ btn.hook("body"); // Appends to the end of the <body> tag
 ```
 
 **Fluent API (Method Chaining):**  
-All core methods (`add()`, `event()`, `hook()`, `render()`) return `this`, enabling concise, readable widget construction:
+All core methods (`add()`, `event()`, `hook()`, `render()`, `attr()`, `attrs()`) return `this`, enabling concise, readable widget construction:
 
 ```ts
 new Widget("button.btn", "Save")
