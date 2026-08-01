@@ -1,6 +1,6 @@
 import { Widget } from "../widget/widget";
 import { ContainerWidget } from "../widget/widget_container";
-import { filter_object } from "../utils/utils";
+import { apply_styles } from "../utils/utils";
 
 export enum grid_align_content_e {
   center = 'center',
@@ -93,15 +93,7 @@ export function WrapGrid(
       gridAreaAuto: options?.gridAreaAuto
     }
   
-    filter_object(grid_config,
-      (key, value) => {
-        if (value?.startsWith('undefined'))
-          return false
-        if(!!value){
-          container.style[key] = value
-        }
-      }
-    )
+    apply_styles(container.self, grid_config)
   
     widgets.forEach((rows, index_row: number) => {
       rows.forEach((item, index_col: number) => {
@@ -119,14 +111,15 @@ export function WrapGrid(
         }
       })
     })
-    widgets.flatMap(item => item).forEach(item => {
-      if (!item) return
-      if (item instanceof Widget)
-        container.add(item)
-      else
-        container.add(item.widget)
-  
-    })
+    for (const row of widgets) {
+      for (const item of row) {
+        if (!item) continue
+        if (item instanceof Widget)
+          container.add(item)
+        else
+          container.add(item.widget)
+      }
+    }
     container.build_all()
 }
 

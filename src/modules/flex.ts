@@ -1,6 +1,6 @@
 import { Widget } from "../widget/widget";
 import { ContainerWidget } from "../widget/widget_container";
-import { filter_object } from "../utils/utils";
+import { apply_styles } from "../utils/utils";
 
 
 export enum flex_direction_e {
@@ -86,15 +86,7 @@ export function WrapFlex(
     height: options?.height,
     width: options?.width
   }
-  filter_object(flex_config,
-    (key, value) => {
-      if (value?.startsWith('undefined'))
-        return false
-      if (!!value) {
-        container.style[key] = value
-      }
-    }
-  )
+  apply_styles(container.self, flex_config)
   widgets.forEach(item => {
     container.add(item)
   })

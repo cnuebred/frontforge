@@ -193,7 +193,7 @@ export class Widget {
     }
 
     this.render_display()
-    if (this.#markdown_content == null || this.#markdown_content == undefined) {
+    if (this.#markdown_content == null) {
       if (render_options.with_markdown) {
         this.self.innerHTML = this.convert_markdown_to_html(this.content)
       } else {
@@ -228,6 +228,7 @@ export class Widget {
 
     this.pinned = false
     this.root.removeChild(this.self)
+    return this
   }
   /**
    * Attaches the widget to the DOM.
@@ -239,22 +240,24 @@ export class Widget {
 
     if (!query && !!this.root) {
       this.root.append(this.self)
+      this.pinned = true
+      return this
     }
 
     if (query instanceof ContainerWidget) {
-      query.add(this)
+      query.add(this, true, true)
+      this.pinned = true
+      this.root = query.self
     } else {
       const root = (typeof (query) == 'string' ? document.querySelector(query) : query) as HTMLElement
+      this.root = root as HTMLElement
+      this.root.append(this.self)
       this.pinned = true
 
       if (this instanceof ContainerWidget) {
-        (this as unknown as ContainerWidget).build_all() // really bad code, idk how to do this better
+        (this as unknown as ContainerWidget).build_all()
       }
-      this.root = root as HTMLElement
-      this.root.append(this.self)
     }
-    // TODO add more functions to events handler
-    // worker after build all or sth like this
     return this
   }
   /**
@@ -279,6 +282,7 @@ export class Widget {
 
     widget.attribute = this.#attribute
     widget.content = this.#content
+    widget.markdown_content = this.#markdown_content
     widget.show = this.show
     widget.events = [...this.events]
 
