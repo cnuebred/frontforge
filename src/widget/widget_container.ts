@@ -17,7 +17,7 @@ import {  DEFAULT_RENDER_OPTIONS, render_options_t, Widget } from "./widget"
 export class ContainerWidget extends Widget {
   #children: Widget[] = []
   /** Callback returning the current list of children (for dynamic views) */
-  widgets: () => Widget[]
+  widgets: () => Widget[] = () => []
 
   /** Number of children in the container */
   get size() {
