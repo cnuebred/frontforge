@@ -113,7 +113,7 @@ export class ForgeBundle {
       entryPoints: typeof (path) == 'string' ? [path] : path,
       bundle: true,
       outfile: 'output.js',
-      format: 'esm',
+      format: 'iife',
       globalName: 'FrontForge',
       platform: 'browser',
       minify: true,
