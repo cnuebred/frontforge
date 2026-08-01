@@ -153,13 +153,23 @@ export class ContainerWidget extends Widget {
 
   /**
    * Inserts a widget at the given position (0 = beginning).
-   * Optionally renders and attaches to the DOM.
+   * Optionally renders and attaches to the DOM at the correct position.
    * @returns `this` – enables chaining
    */
   insert_at(index: number, widget: Widget, with_render?: boolean, with_hook?: boolean): this {
     this.#children.splice(index, 0, widget)
     if (with_render) widget.render()
-    if (with_hook) widget.hook(this.self)
+    if (with_hook) {
+      // Insert DOM element at the correct position (not just append)
+      const next = this.#children[index + 1]
+      if (next && next.self && next.self.parentNode === this.self) {
+        this.self.insertBefore(widget.self, next.self)
+      } else {
+        this.self.appendChild(widget.self)
+      }
+      widget.root = this.self
+      widget.pinned = true
+    }
     return this
   }
   /**
