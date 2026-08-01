@@ -151,6 +151,16 @@ btn.event("click", (e) => {
 btn.hook("body"); // Appends to the end of the <body> tag
 ```
 
+**Fluent API (Method Chaining):**  
+All core methods (`add()`, `event()`, `hook()`, `render()`) return `this`, enabling concise, readable widget construction:
+
+```ts
+new Widget("button.btn", "Save")
+  .event("click", () => console.log("Saved!"))
+  .hook("body")
+  .render();
+```
+
 **Dynamic Content Evaluation:**  
 A Widget's content doesn't have to be static. You can pass a callback function that evaluates dynamically every time render() is called. 
 ```ts
