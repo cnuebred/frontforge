@@ -53,6 +53,21 @@ const DEFAULT_FLEX_OPTIONS: flex_options_t = {
   direction: flex_direction_e.row,
 }
 
+/**
+ * Wraps an existing container with flexbox layout and populates it with widgets.
+ * Applies flex CSS properties to the container, then adds and builds all children.
+ * 
+ * @param container - existing ContainerWidget to wrap
+ * @param widgets - child widgets to place inside the flex container
+ * @param options - flex layout configuration (direction, wrap, alignment, gaps, etc.)
+ * 
+ * @example
+ * ```ts
+ * const container = new ContainerWidget()
+ * WrapFlex(container, [header, content, footer], { direction: flex_direction_e.column })
+ * container.hook("body")
+ * ```
+ */
 export function WrapFlex(
   container: ContainerWidget,
   widgets: (Widget | ContainerWidget)[],
@@ -84,11 +99,6 @@ export function WrapFlex(
     container.add(item)
   })
   container.build_all()
-  container.render({
-    with_attributes: true,
-    with_markdown: true
-  })
-
 }
 
 export function Flex(widgets: (Widget | ContainerWidget)[], options: flex_options_t = DEFAULT_FLEX_OPTIONS): ContainerWidget {

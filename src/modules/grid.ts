@@ -53,6 +53,26 @@ export type grid_widget_item_t = {
 
 const DEFAULT_GRID_OPTIONS: grid_options_t = {} // TODO... or not
 
+/**
+ * Wraps an existing container with CSS grid layout and populates it with widgets.
+ * Supports 2D widget arrays (rows × columns), auto grid-area placement,
+ * and per-widget row/column spans via {@link grid_widget_item_t}.
+ * 
+ * @param container - existing ContainerWidget to wrap
+ * @param widgets - 2D array of widgets (rows of columns); `null` = empty cell
+ * @param options - grid layout configuration (template columns/rows, gaps, alignment, etc.)
+ * 
+ * @example
+ * ```ts
+ * const container = new ContainerWidget()
+ * WrapGrid(container, [
+ *   [header, header, header],
+ *   [sidebar, main, null],
+ *   [footer, footer, footer],
+ * ], { gridTemplateColumns: "200px 1fr 200px" })
+ * container.hook("body")
+ * ```
+ */
 export function WrapGrid(
   container: ContainerWidget, 
   widgets: (Widget | grid_widget_item_t | ContainerWidget | null)[][], 
@@ -108,10 +128,6 @@ export function WrapGrid(
   
     })
     container.build_all()
-    container.render({
-      with_attributes: true,
-      with_markdown: true
-    })
 }
 
 export function Grid(widgets: (Widget | grid_widget_item_t | ContainerWidget | null)[][], options: grid_options_t = DEFAULT_GRID_OPTIONS): ContainerWidget {
