@@ -1,19 +1,27 @@
 {
-    "compilerOptions": {
-        "target": "ES2021",
-        "module": "CommonJS",
-        "esModuleInterop": true,
-        "moduleResolution": "node",
-        "sourceMap": false,
-        "outDir": "dist",
-        "declaration": true,
-        "baseUrl": "./",
-    },
-    "include": [
-        "src/**/*"
-      ],
-    "exclude": [
-        "src/cdn/**/*.ts",
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "rootDir": "./",
+    "target": "ES2022",
+    "module": "node16",
+    "esModuleInterop": true,
+    "moduleResolution": "node16",
+    "sourceMap": false,
+    "outDir": "dist",
+    "declaration": true,
+    "baseUrl": "./",
+    "paths": {
+      "node:process": [
+        "./node_modules/process"
+      ]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "test/base.repository.test.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tools"
+  ]
 }
