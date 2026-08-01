@@ -61,14 +61,14 @@ export class Widget {
   /** Rodzic w drzewie DOM */
   root: HTMLElement
   #content: (() => string) | string
-  #attribute: (() => attr_t) | attr_t
-  #markdown_content: boolean = null
+  #attribute: (() => attributes_t) | attributes_t
+  #markdown_content: boolean | null = null
   /** Zarejestrowane event listenery */
   events: [string, (event: Event) => void][] = []
-  /** Styl inline (camelCase → kebab-case automatycznie) */
-  style: CSSStyleDeclaration // buuu CamelCase :<
   /** Operatory klas CSS (add, toggle, remove) */
   class: element_class_operator_t
+  /** Styl inline – zawsze odnosi się do `this.self.style` (getter) */
+  get style(): CSSStyleDeclaration { return this.self.style }
   //states 
   /** Czy widget jest podpięty do DOM */
   pinned: boolean = false
@@ -99,7 +99,6 @@ export class Widget {
 
     this.self = document.createElement(tag)
     this.class = element_class_operators(this.self)
-    this.style = this.self.style
     this.content = value
     this.self.setAttribute('v', `${this.hash}`)
 
@@ -124,10 +123,10 @@ export class Widget {
     this.#content = text
   }
   /** Atrybuty HTML widgetu (obiekt lub funkcja zwracająca obiekt) */
-  set attribute(attr: (() => Attr) | Attr) {
+  set attribute(attr: (() => attributes_t) | attributes_t) {
     this.#attribute = attr
   }
-  get attribute(): Attr {
+  get attribute(): attributes_t {
     return get_value_from_function_or_property(this.#attribute)
   }
 
@@ -141,7 +140,7 @@ export class Widget {
       this.self.removeAttribute(this.self.attributes[i].name)
     }
   }
-  protected apply_attributes_by_object(attributes: Attr[]) {
+  protected apply_attributes_by_object(attributes: attributes_t) {
     for (const index in attributes) {
       if (attributes[index])
         this.self.setAttribute(index.toString(), attributes[index].toString())
